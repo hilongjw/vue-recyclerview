@@ -15,7 +15,7 @@
 </style>
 
 <script>
-import InfiniteScroller from '../infinite'
+import InfiniteScroller from './infinite'
 import Vue from 'vue'
 
 function ContentSource (fetch, itemRender, Tombstone) {

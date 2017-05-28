@@ -17,7 +17,7 @@
  */
 
 // Number of items to instantiate beyond current view in the scroll direction.
-var RUNWAY_ITEMS = 50
+var RUNWAY_ITEMS = 10
 
 // Number of items to instantiate beyond current view in the opposite direction.
 var RUNWAY_ITEMS_OPPOSITE = 10
@@ -31,6 +31,8 @@ var ANIMATION_DURATION_MS = 200
 var TOMBSTONE_CLASS = 'tombstone'
 
 var INVISIBLE_CLASS = 'invisible'
+
+const MAX_COUNT = Infinity
 
 /**
  * Construct an infinite scroller.
@@ -46,6 +48,7 @@ export default function InfiniteScroller(scroller, source, options = {}) {
   this.ANIMATION_DURATION_MS = options.ANIMATION_DURATION_MS || ANIMATION_DURATION_MS
   this.TOMBSTONE_CLASS = options.TOMBSTONE_CLASS || TOMBSTONE_CLASS
   this.INVISIBLE_CLASS = options.INVISIBLE_CLASS || INVISIBLE_CLASS
+  this.MAX_COUNT = MAX_COUNT
 
   this.anchorItem = {
     index: 0,
@@ -298,6 +301,8 @@ InfiniteScroller.prototype = {
     let node
     let newNodes = []
     let i
+
+    if (this.lastAttachedItem_ > this.MAX_COUNT) this.lastAttachedItem_ = this.MAX_COUNT - 1
     // Create DOM nodes.
     for (i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       while (this.items_.length <= i) {
@@ -363,7 +368,7 @@ InfiniteScroller.prototype = {
 
     this.setAnimatePosition(tombstoneAnimations)
 
-    this.setScrollRunway()
+    // this.setScrollRunway()
 
     if (this.ANIMATION_DURATION_MS) {
       // TODO: Should probably use transition end, but there are a lot of animations we could be listening to.
@@ -401,7 +406,10 @@ InfiniteScroller.prototype = {
     var itemsNeeded = this.lastAttachedItem_ - this.loadedItems_;
     if (itemsNeeded <= 0) return
     this.requestInProgress_ = true
-    this.source_.fetch(itemsNeeded).then(this.addContent.bind(this))
+    this.source_.fetch(itemsNeeded).then(data => {
+      this.MAX_COUNT = data.count
+      this.addContent(data.list)
+    })
   },
 
   /**
@@ -428,11 +436,16 @@ InfiniteScroller.prototype = {
     this.requestInProgress_ = false
     var startIndex = this.items_.length
 
+    let index
     for (var i = 0; i < items.length; i++) {
       if (this.items_.length <= this.loadedItems_) {
         this.addItem_()
       }
-      this.items_[this.loadedItems_++].data = items[i]
+      if (this.loadedItems_ <= this.MAX_COUNT) {
+        index = this.loadedItems_++
+        this.items_[index].data = items[i]
+      }
+      
     }
 
     this.attachContent()
