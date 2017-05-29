@@ -14,6 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * Author surma https://github.com/surma
+ * Modified by Awe @hilongjw
  */
 
 // Number of items to instantiate beyond current view in the scroll direction.

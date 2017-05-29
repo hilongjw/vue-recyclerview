@@ -127,4 +127,10 @@ export default {
 </template>
 ```
 
+## License
+
+MIT
+
+the project inspired by [infinite-scroller](https://github.com/GoogleChrome/ui-element-samples/tree/gh-pages/infinite-scroller)
+
 
