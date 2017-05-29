@@ -1,23 +1,38 @@
 # vue-recyclerview
 
-## usage
+Mastering Large Lists with the vue-recyclerview
+
+## Install
+
+```bash
+npm i vue-recyclerview
+
+```
+
+```html
+<script src="https://unpkg.com/vue-recyclerview"></script>>
+```
+
+
+## Usage
 
 ```html
 <template>
   <div id="app">
-    <CycleList 
+    <RecyclerView
       :prerender="30" 
       key="mi" 
       class="recyclerview mi-list" 
       :fetch="MiFetch" 
       :item="MiItem" 
       :tombstone="MiTomstone"
-    ></CycleList>
+    ></RecyclerView>
   </div>
 </template>
 
 <script>
-import CycleList from './components/CycleList'
+import Vue from 'vue'
+import RecyclerView from 'vue-recyclerview'
 import MiItem from './components/MiItem.vue'
 import MiTomstone from './components/MiTombstone.vue'
 
@@ -47,7 +62,7 @@ export default {
     }
   },
   components: {
-    CycleList
+    RecyclerView: RecyclerView(Vue)
   }
 </script>
 
