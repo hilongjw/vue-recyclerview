@@ -334,7 +334,7 @@ InfiniteScroller.prototype = {
       newNodes.push(node)
     }
 
-    let len = len = newNodes.length
+    let len = newNodes.length
     for (i = 0; i < len; i++) {
       this.scroller_.appendChild(newNodes[i])
     }
