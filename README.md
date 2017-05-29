@@ -4,7 +4,7 @@ Mastering Large Lists with the vue-recyclerview
 
 ## Demo
 
-demo is here [https://hilongjw.github.io/vue-recyclerview/](https://hilongjw.github.io/vue-recyclerview/)
+[https://hilongjw.github.io/vue-recyclerview/](https://hilongjw.github.io/vue-recyclerview/)
 
 
 ## Install
