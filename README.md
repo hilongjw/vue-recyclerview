@@ -2,6 +2,11 @@
 
 Mastering Large Lists with the vue-recyclerview
 
+## Demo
+
+demo is here [https://hilongjw.github.io/vue-recyclerview/](https://hilongjw.github.io/vue-recyclerview/)
+
+
 ## Install
 
 ```bash
@@ -129,7 +134,7 @@ export default {
 
 ## License
 
-MIT
+[MIT](https://github.com/hilongjw/vue-recyclerview/blob/master/License)
 
 the project inspired by [infinite-scroller](https://github.com/GoogleChrome/ui-element-samples/tree/gh-pages/infinite-scroller)
 
