@@ -1,6 +1,6 @@
 {
   "name": "vue-recyclerview",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Mastering Large Lists with the vue-recyclerview",
   "main": "src/RecyclerView.vue",
   "directories": {
