@@ -6,6 +6,9 @@ Mastering Large Lists with the vue-recyclerview
 
 [https://hilongjw.github.io/vue-recyclerview/](https://hilongjw.github.io/vue-recyclerview/)
 
+## Requirements
+
+Vue 2.0 +
 
 ## Install
 
