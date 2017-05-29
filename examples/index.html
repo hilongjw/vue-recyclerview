@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="../dist/recyclerview.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        var MiFetch = MiFetch
+        var tombstone = {}
+        var item = {}
+
+        var app = new Vue({
+            el: '#app',
+            template: `<div id="app">
+                <RecyclerView
+                  :prerender="30"
+                  key="mi" 
+                  class="mi-list" 
+                  :fetch="MiFetch" 
+                  :item="MiItem" 
+                  :tombstone="MiTomstone"
+                ></RecyclerView>
+              </div>`,
+            data: {
+                tombstone: 
+            },
+            components: {
+                RecyclerView: RecyclerView(Vue)
+            }
+        })
+    </script>
+</body>
+</html>
