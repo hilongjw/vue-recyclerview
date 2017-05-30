@@ -2,6 +2,11 @@
 
 Mastering Large Lists with the vue-recyclerview
 
+## Preview
+
+![](https://hilongjw.github.io/vue-recyclerview/preview.gif)
+
+
 ## Demo
 
 [https://hilongjw.github.io/vue-recyclerview/](https://hilongjw.github.io/vue-recyclerview/)
@@ -20,7 +25,6 @@ npm i vue-recyclerview
 ```html
 <script src="https://unpkg.com/vue-recyclerview"></script>>
 ```
-
 
 ## Usage
 
