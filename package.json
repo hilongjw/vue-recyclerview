@@ -17,7 +17,7 @@
   "unpkg": "dist/vue-recyclerview.js",
   "files": [
     "src",
-    "dist/*.js",
+    "dist/*.js"
   ],
   "keywords": [
     "vue-recyclerview",
