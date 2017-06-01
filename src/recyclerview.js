@@ -73,12 +73,23 @@ class ContentSource {
   }
 }
 
+const Loading = {
+  render (h) {
+    return h('div', {
+      attrs: {
+        class: 'recyclerview-loading'
+      }
+    }, 'Loading')
+  }
+}
+
 export default (Vue) => {
   return {
     name: 'RecyclerView',
     props: {
       fetch: Function,
       item: Object,
+      Loading: Object,
       tombstone: Object,
       prerender: Number,
       tag: {
@@ -88,15 +99,25 @@ export default (Vue) => {
     },
     render (h) {
       return h(this.tag, {
-        on: {
-          touchstart: this.touchStart,
-          touchmove: this.touchMove,
-          touchend: this.touchEnd,
-          mousedown: this.touchStart,
-          mousemove: this.touchMove,
-          mouseup: this.touchEnd
+        attrs: {
+          class: 'recyclerview-container'
         }
-      }, this.$slots.default)
+      }, [
+        h(this.Loading || Loading),
+        h(this.tag, {
+          attrs: {
+            class: 'recyclerview'
+          },
+          on: {
+            touchstart: this.touchStart,
+            touchmove: this.touchMove,
+            touchend: this.touchEnd,
+            mousedown: this.touchStart,
+            mousemove: this.touchMove,
+            mouseup: this.touchEnd
+          }
+        })]
+      )
     },
     data () {
       return {
@@ -112,17 +133,15 @@ export default (Vue) => {
     },
     mounted () {
       this.init()
-      setTimeout(() => {
-        this.scrollTo()
-      }, 5000)
     },
     beforeDestroy () {
       this.scroller.destroy()
     },
     methods: {
       init () {
+        this.$list = this.$el.querySelector('.recyclerview')
         this.scroller = new InfiniteScroller(
-          this.$el,
+          this.$list,
           this.contentSource,
           {
             RUNWAY_ITEMS: this.prerender
@@ -131,13 +150,13 @@ export default (Vue) => {
       },
       scrollTo (top) {
         if (!top) top = 0
-        this.$el.scrollTop = Number(top)
+        this.$list.scrollTop = Number(top)
       },
       touchStart (e) {
-        if (this.$el.scrollTop > 0) return
+        if (this.$list.scrollTop > 0) return
         this.pulling = true
         this.startPointer = getEventPosition(e)
-        this.$el.style.transition = 'transform .5s'
+        this.$list.style.transition = 'transform .5s'
       },
       touchMove (e) {
         if (!this.pulling) return
@@ -150,11 +169,11 @@ export default (Vue) => {
           this.distance = 50
         }
 
-        this.$el.style.transform = 'translate3d(0, ' + this.distance + 'px, 0)'
+        this.$list.style.transform = 'translate3d(0, ' + this.distance + 'px, 0)'
       },
       touchEnd (e) {
         this.pulling = false
-        this.$el.style.transform = ''
+        this.$list.style.transform = ''
         if (this.distance >= 50) {
           this.distance = 0
           this.scroller.clear()

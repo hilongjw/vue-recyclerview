@@ -1,3 +1,16 @@
+.recyclerview-container {
+  position: relative;
+}
+.recyclerview-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #9E9E9E;
+}
 .recyclerview {
   margin: 0;
   padding: 0;
