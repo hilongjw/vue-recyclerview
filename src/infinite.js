@@ -454,9 +454,16 @@ InfiniteScroller.prototype = {
   },
 
   clear () {
-    this.items_ = []
     this.loadedItems_ = 0
     this.requestInProgress_ = false
+
+    this.firstAttachedItem_ = -1
+    this.lastAttachedItem_ = -1
+
+    this.getUnUsedNodes()
+    this.clearUnUsedNodes()
+    this.items_ = []
+
     this.onResize_()
   },
 
