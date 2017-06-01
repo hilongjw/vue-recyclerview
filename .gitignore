@@ -4,3 +4,4 @@ node_modules
 serve
 *.pem
 .vscode
+npm-debug.log
