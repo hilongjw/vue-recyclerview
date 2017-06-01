@@ -453,6 +453,13 @@ InfiniteScroller.prototype = {
     this.attachContent()
   },
 
+  clear () {
+    this.items_ = []
+    this.loadedItems_ = 0
+    this.requestInProgress_ = false
+    this.onResize_()
+  },
+
   destroy () {
     this.scroller_.removeEventListener('scroll', this.onScroll_)
     window.removeEventListener('resize', this.onResize_)
