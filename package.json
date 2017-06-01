@@ -14,6 +14,11 @@
     "type": "git",
     "url": "git+https://github.com/hilongjw/vue-recyclerview.git"
   },
+  "unpkg": "dist/vue-recyclerview.js",
+  "files": [
+    "src",
+    "dist/*.js",
+  ],
   "keywords": [
     "vue-recyclerview",
     "vue",
