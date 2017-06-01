@@ -140,6 +140,39 @@ export default {
 </template>
 ```
 
+### loading
+
+```html
+<template>
+  <div>
+    <RecyclerView
+      :loading="Loading"
+    ></RecyclerView>
+  </div>
+</template>
+
+<script>
+// loading component
+const Loading = {
+  render (h) {
+    return h('div', {
+      attrs: {
+        class: 'recyclerview-loading'
+      }
+    }, 'Loading')
+  }
+}
+
+export default {
+  data () {
+    return {
+      Loading: Loading
+    }
+  }
+}
+</script>
+```
+
 ## License
 
 [MIT](https://github.com/hilongjw/vue-recyclerview/blob/master/License)
