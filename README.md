@@ -28,6 +28,12 @@ npm i vue-recyclerview
 
 ## Usage
 
+```javascript
+// main.js
+import Recyclerview from 'vue-recyclerview'
+Vue.use(Recyclerview)
+```
+
 ```html
 <template>
   <div id="app">
@@ -43,8 +49,6 @@ npm i vue-recyclerview
 </template>
 
 <script>
-import Vue from 'vue'
-import RecyclerView from 'vue-recyclerview'
 import MiItem from './components/MiItem.vue'
 import MiTomstone from './components/MiTombstone.vue'
 
@@ -72,9 +76,6 @@ export default {
       MiItem,
       MiTomstone
     }
-  },
-  components: {
-    RecyclerView: RecyclerView(Vue)
   }
 </script>
 
