@@ -10,7 +10,7 @@ const baseData = [
         "price_min": "1499.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/f11b3f5b4a1df7e9bdfce788b6506ebb.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/f11b3f5b4a1df7e9bdfce788b6506ebb.jpg",
         "action": {
             "log_code": "30000001110001001"
         },
@@ -27,7 +27,7 @@ const baseData = [
         "price_min": "699.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/7ac41c17d544d20044d7f6c3e6ce579a.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/7ac41c17d544d20044d7f6c3e6ce579a.jpg",
         "action": {
             "log_code": "30000001110002001"
         },
@@ -44,7 +44,7 @@ const baseData = [
         "price_min": "399.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/563988090779f68e8f709a1ce3c58ea6.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/563988090779f68e8f709a1ce3c58ea6.jpg",
         "action": {
             "log_code": "30000001110003001"
         },
@@ -61,7 +61,7 @@ const baseData = [
         "price_min": "169.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/7442b315c1cc06f64700e39212dbf054.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/7442b315c1cc06f64700e39212dbf054.jpg",
         "action": {
             "log_code": "30000001110004001"
         },
@@ -78,7 +78,7 @@ const baseData = [
         "price_min": "149.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/c1f9eecd1d0b411315f2e698e953a52d.jpg?bg=BCCBD7",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/c1f9eecd1d0b411315f2e698e953a52d.jpg?bg=BCCBD7",
         "action": {
             "log_code": "30000001110005001"
         },
@@ -95,7 +95,7 @@ const baseData = [
         "price_min": "159.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/627e742506047f3fe2971d4d87e10924.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/627e742506047f3fe2971d4d87e10924.jpg",
         "action": {
             "log_code": "30000001110006001"
         },
@@ -112,12 +112,12 @@ const baseData = [
         "price_min": "49.00",
         "has_store": "0",
         "is_cos": true,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/192b741dd0b17b301bd7955bb5e7a7f5.jpg?bg=65A0B7",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/192b741dd0b17b301bd7955bb5e7a7f5.jpg?bg=65A0B7",
         "action": {
             "log_code": "30000001110007001"
         },
         "product_comment": "【4月6日0点 首卖】</font>PET初效滤网 / H11高效过滤器 / 360°桶形设计",
-        "tag_img": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/89854765948bdb494f85deeab661a53e.png?bg=95C85E"
+        "tag_img": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/89854765948bdb494f85deeab661a53e.png?bg=95C85E"
     },
     {
         "id": "4117",
@@ -129,7 +129,7 @@ const baseData = [
         "price_min": "149.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/c01573cec4d3363d7efd511cbf7cfbc1.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/c01573cec4d3363d7efd511cbf7cfbc1.jpg",
         "action": {
             "log_code": "30000001110001001"
         },
@@ -146,7 +146,7 @@ const baseData = [
         "price_min": "99.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/6451e09563f5fe44bfc912bc128fceeb.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/6451e09563f5fe44bfc912bc128fceeb.jpg",
         "action": {
             "log_code": "30000001110002001"
         },
@@ -163,7 +163,7 @@ const baseData = [
         "price_min": "49.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/8873564985f8151acdbef39e48ab316c.jpg?bg=C0C4C7",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/8873564985f8151acdbef39e48ab316c.jpg?bg=C0C4C7",
         "action": {
             "log_code": "30000001110003001"
         },
@@ -180,7 +180,7 @@ const baseData = [
         "price_min": "69.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/8cac1e6358258a06d8cd2ed4b4226f44.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/8cac1e6358258a06d8cd2ed4b4226f44.jpg",
         "action": {
             "log_code": "30000001110004001"
         },
@@ -197,7 +197,7 @@ const baseData = [
         "price_min": "19.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/eb425a1dd77653409470fb66b8f8f82a.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/eb425a1dd77653409470fb66b8f8f82a.jpg",
         "action": {
             "log_code": "30000001110005001"
         },
@@ -214,7 +214,7 @@ const baseData = [
         "price_min": "29.90",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/7957abb8ffac6dc5e75b124a58895432.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/7957abb8ffac6dc5e75b124a58895432.jpg",
         "action": {
             "log_code": "30000001110006001"
         },
@@ -231,7 +231,7 @@ const baseData = [
         "price_min": "69.00",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/8cac1e6358258a06d8cd2ed4b4226f44.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/8cac1e6358258a06d8cd2ed4b4226f44.jpg",
         "action": {
             "log_code": "30000001110007001"
         },
@@ -248,7 +248,7 @@ const baseData = [
         "price_min": "29.90",
         "has_store": "1",
         "is_cos": false,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/1b8a63495fff6861d5485f1d3a843483.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/1b8a63495fff6861d5485f1d3a843483.jpg",
         "action": {
             "log_code": "30000001110008001"
         },
@@ -265,12 +265,12 @@ const baseData = [
         "price_min": "69.00",
         "has_store": "0",
         "is_cos": true,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/747bdc5fe4ae9976ac05e8af1eb4c52e.jpg?bg=BAC6A4",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/747bdc5fe4ae9976ac05e8af1eb4c52e.jpg?bg=BAC6A4",
         "action": {
             "log_code": "30000001110009001"
         },
         "product_comment": "2.4G高速传输 / 1200dpi 精准定位 / 一键“后退”* / 耐脏亲肤涂层 / 人体工学设计 ",
-        "tag_img": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/89854765948bdb494f85deeab661a53e.png?bg=95C85E"
+        "tag_img": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/89854765948bdb494f85deeab661a53e.png?bg=95C85E"
     },
     {
         "id": "5499",
@@ -282,12 +282,12 @@ const baseData = [
         "price_min": "299.00",
         "has_store": "0",
         "is_cos": true,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/dd4e70d66276839ed73d9a9b897d4859.jpg?bg=FFFFFF",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/dd4e70d66276839ed73d9a9b897d4859.jpg?bg=FFFFFF",
         "action": {
             "log_code": "30000001110010001"
         },
         "product_comment": "87键 / 铝合金机身 / TTC 红轴 / 简约百搭",
-        "tag_img": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/89854765948bdb494f85deeab661a53e.png?bg=95C85E"
+        "tag_img": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/89854765948bdb494f85deeab661a53e.png?bg=95C85E"
     },
     {
         "id": "5287",
@@ -299,7 +299,7 @@ const baseData = [
         "price_min": "99.00",
         "has_store": "0",
         "is_cos": true,
-        "img_url": "http://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/648060ed1a8ef00f5756679ef7ba6971.jpg",
+        "img_url": "https://cdn.cnbj0.fds.api.mi-img.com/b2c-mimall-media/648060ed1a8ef00f5756679ef7ba6971.jpg",
         "action": {
             "log_code": "30000001110011001"
         },
@@ -330,17 +330,21 @@ function getItem () {
   })
 }
 
-export default function fetch (count, items) {
-  count = Math.max(30, count)
+function query (limit, skip) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       var items = []
-      for (var i = 0; i < Math.abs(count); i++) {
+      for (var i = 0; i < limit; i++) {
         items[i] = getItem()
       }
       resolve(Promise.all(items))
     }, 200)
   })
+}
+
+function fetch (limit, skip) {
+  limit = Math.max(30, limit)
+  return query(limit, skip)
   .then(list => {
     return {
       list: list,
@@ -348,3 +352,4 @@ export default function fetch (count, items) {
     }
   })
 }
+

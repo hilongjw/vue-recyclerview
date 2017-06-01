@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        background: #000;
+      }
+      .mi-item {
+        padding: 0 0 3px;
+        position: absolute;
+        background: #fff;
+        list-style: none;
+        width: 100%;
+      }
+      .mi-item::after {
+        content: "";
+        position: absolute;
+        bottom: 1.5px;
+        left: 150px;
+        right: 0;
+        border-bottom: 1px solid #e4e4e4;
+      }
+      .version-item {
+        display: flex;
+        display: -webkit-box;
+        box-align: center;
+        -webkit-box-align: center;
+        width: 100%;
+      }
+      .version-item-img {
+          width: 180px;
+          height: 180px;
+          position: relative;
+      }
+      .version-item-img img {
+          width: 100%;
+      }
+      .version-item .version-item-intro {
+        -webkit-box-flex: 1;
+        box-flex: 1;
+        display: block;
+        padding: 0 15px 5px;
+      }
+      .version-item .version-item-intro .version-item-name {
+        font-size: 14px;
+        color: rgba(0,0,0,.87);
+        margin-bottom: 8px;
+      }
+      .version-item .version-item-intro .version-item-brief {
+        font-size: 12px;
+        color: rgba(0,0,0,.54);
+        margin-bottom: 8px;
+        line-height: 15px;
+        overflow: hidden;
+      }
+      .version-item-brief p {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          word-break: break-all;
+      }
+      .version-item .version-item-intro .version-item-intro-price {
+        font-size: 15px;
+        position: relative;
+        margin-left: 10px;
+      }
+      .version-item .version-item-intro span {
+          color: #ff6000;
+      }
+      .mi-item.tombstone p {
+        width: 100%;
+        height: 0.5em;
+        background-color: #ccc;
+        margin: 0.5em 0;
+      }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="../../dist/vue-recyclerview.js"></script>
+    <script src="./mi-fetch.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        var MiFetch = fetch
+        var item = {
+          template: `<li class="mi-item">
+              <a class="version-item">
+                  <div class="version-item-img">
+                      <img class="lazy" :src="data.img_url">
+                  </div>
+                  <div class="version-item-intro">
+                      <div class="version-item-name">
+                          <p>{{data.name}}</p>
+                      </div>
+                      <div class="version-item-brief">
+                          <p>{{ data.product_comment }}</p>
+                      </div>
+                      <div class="version-item-intro-price">
+                          <span>{{ data.price_min }}</span>
+                      </div>
+                  </div>
+              </a>
+          </li>`,
+          props: {
+            data: Object
+          }
+        }
+        
+        var tombstone = {
+          template: `<li class="mi-item tombstone">
+              <a class="version-item">
+                  <div class="version-item-img">
+                      <img class="lazy" src="https://i8.mifile.cn/v1/a1/76f98ed9-86c5-dcda-0ba2-b79f62b0f195.webp?width=360&height=360">
+                  </div>
+                  <div class="version-item-intro">
+                      <div class="version-item-name">
+                          <p></p>
+                      </div>
+                      <div class="version-item-brief">
+                          <p></p>
+                      </div>
+                      <div class="version-item-intro-price">
+                          <span>00.00</span>
+                      </div>
+                  </div>
+              </a>
+          </li>`
+        }
+
+        Vue.use(RecyclerView)
+
+        var app = new Vue({
+            el: '#app',
+            template: `<div id="app">
+                <RecyclerView
+                  style="height: 100vh"
+                  :prerender="30"
+                  :fetch="MiFetch" 
+                  :item="item" 
+                  :tombstone="tombstone"
+                ></RecyclerView>
+              </div>`,
+            data: {
+                item: item,
+                tombstone: tombstone,
+                MiFetch: MiFetch
+            }
+        })
+    </script>
+</body>
+</html>

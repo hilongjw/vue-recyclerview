@@ -1,28 +1,5 @@
 import InfiniteScroller from './infinite'
-
-const defaultPosition = {
-  x: 0,
-  y: 0
-}
-
-const mouseEvent = /mouse/
-
-export function getEventPosition (e) {
-  if (!e) return defaultPosition
-  if (e.type === 'touchmove') {
-    let touch = e.touches[0]
-    return {
-      x: touch.clientX,
-      y: touch.clientY
-    }
-  } else if (mouseEvent.test(e.type)) {
-    return {
-      x: e.clientX,
-      y: e.clientY
-    }
-  }
-  return defaultPosition
-}
+import { getEventPosition } from './util'
 
 class ContentSource {
   constructor (fetch, itemRender, TombstoneRender, Vue) {
@@ -79,7 +56,7 @@ const Loading = {
       attrs: {
         class: 'recyclerview-loading'
       }
-    }, 'Loading')
+    }, 'Loading...')
   }
 }
 
@@ -89,7 +66,7 @@ export default (Vue) => {
     props: {
       fetch: Function,
       item: Object,
-      Loading: Object,
+      loading: Object,
       tombstone: Object,
       prerender: Number,
       tag: {
@@ -103,7 +80,7 @@ export default (Vue) => {
           class: 'recyclerview-container'
         }
       }, [
-        h(this.Loading || Loading),
+        h(this.loading || Loading),
         h(this.tag, {
           attrs: {
             class: 'recyclerview'

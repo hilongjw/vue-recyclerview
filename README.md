@@ -30,8 +30,8 @@ npm i vue-recyclerview
 
 ```javascript
 // main.js
-import Recyclerview from 'vue-recyclerview'
-Vue.use(Recyclerview)
+import RecyclerView from 'vue-recyclerview'
+Vue.use(RecyclerView)
 ```
 
 ```html
@@ -40,7 +40,7 @@ Vue.use(Recyclerview)
     <RecyclerView
       :prerender="30" 
       key="mi" 
-      class="recyclerview mi-list" 
+      style="height: calc(100vh - 50px)"
       :fetch="MiFetch" 
       :item="MiItem" 
       :tombstone="MiTomstone"
@@ -53,13 +53,10 @@ import MiItem from './components/MiItem.vue'
 import MiTomstone from './components/MiTombstone.vue'
 
 const totalCount = 1000
-const MiFetch =  function fetch (count, items) {
-  count = Math.max(30, count)
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve([ ... mockData])
-    }, 200)
-  })
+
+function fetch (limit, skip) {
+  limit = Math.max(30, limit)
+  return query(limit, skip)
   .then(list => {
     return {
       list: list,
@@ -72,7 +69,7 @@ export default {
   name: 'app',
   data () {
     return {
-      MiFetch: MiFetch,
+      MiFetch: fetch,
       MiItem,
       MiTomstone
     }
@@ -159,7 +156,7 @@ const Loading = {
       attrs: {
         class: 'recyclerview-loading'
       }
-    }, 'Loading')
+    }, 'Loading...')
   }
 }
 

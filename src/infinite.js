@@ -408,7 +408,7 @@ InfiniteScroller.prototype = {
     var itemsNeeded = this.lastAttachedItem_ - this.loadedItems_;
     if (itemsNeeded <= 0) return
     this.requestInProgress_ = true
-    this.source_.fetch(itemsNeeded).then(data => {
+    this.source_.fetch(itemsNeeded, this.items_.length).then(data => {
       this.MAX_COUNT = data.count
       this.addContent(data.list)
     })
