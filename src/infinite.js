@@ -200,7 +200,7 @@ InfiniteScroller.prototype = {
 
   getUnUsedNodes () {
     for (let i = 0; i < this.items_.length; i++) {
-      if (i == this.firstAttachedItem_) {
+      if (i === this.firstAttachedItem_) {
         i = this.lastAttachedItem_ - 1
         continue
       }
@@ -457,24 +457,9 @@ InfiniteScroller.prototype = {
   },
 
   destroy () {
-    this.clear()
     this.scroller_.removeEventListener('scroll', this.onScroll_)
     window.removeEventListener('resize', this.onResize_)
     window.removeEventListener('orientationchange', this.onResize_)
-
-    this.firstAttachedItem_ = 0
-    this.lastAttachedItem_ = 0
-    this.anchorScrollTop = 0
-    this.tombstoneSize_ = 0
-    this.tombstoneWidth_ = 0
-    this.tombstones_ = []
-    this.scroller_ = null
-    this.source_ = null
-    this.loadedItems_ = 0
-    this.requestInProgress_ = false
-
-    this.curPos = 0
-    this.unusedNodes = []
-    this.baseNode = null
+    this.clear()
   }
 }

@@ -1,59 +1,11 @@
 import InfiniteScroller from './infinite'
+import ContentSource from './content-source'
 import {
   getEventPosition,
   requestAnimationFrame,
   preventDefaultException,
   assign
  } from './util'
-
-class ContentSource {
-  constructor (fetch, itemRender, TombstoneRender, Vue) {
-    this.itemRender = itemRender
-    this.TombstoneRender = TombstoneRender
-    this.fetch = fetch
-    this.Vue = Vue
-  }
-
-  getVm (data, el, item) {
-    if (!this.vmCache[data.id]) {
-      this.vmCache[data.id] = new this.Vue({
-        render: (h) => {
-          return h(this.itemRender, {
-            props: {
-              data: data
-            }
-          })
-        }
-      })
-    }
-    return this.vmCache[data.id]
-  }
-
-  createTombstone (el) {
-    const vm = new this.Vue({
-      render: (h) => {
-        return h(this.TombstoneRender)
-      }
-    })
-    vm.$mount(el)
-    return vm.$el
-  }
-
-  render (data, el, item) {
-    const vm = new this.Vue({
-      el: el,
-      render: (h) => {
-        return h(this.itemRender, {
-          props: {
-            data: data
-          }
-        })
-      }
-    })
-    item.vm = vm
-    return vm.$el
-  }
-}
 
 const Loading = {
   render (h) {
@@ -104,10 +56,7 @@ export default (Vue) => {
       prerender: Number,
       remain: Number,
       preventDefault: Boolean,
-      options: {
-        type: Object,
-        default: () => options
-      },
+      options: Object,
       tag: {
         type: String,
         default: 'div'
@@ -125,13 +74,13 @@ export default (Vue) => {
             class: 'recyclerview'
           },
           on: {
-            'touchstart': this._start,
-            'touchmove': this._move,
-            'touchend': this._end,
-            'touchcancel': this._end,
-            'mousedown': this._start,
-            'mousemove': this._move,
-            'mouseup': this._end
+            touchstart: this._start,
+            touchmove: this._move,
+            touchend: this._end,
+            touchcancel: this._end,
+            mousedown: this._start,
+            mousemove: this._move,
+            mouseup: this._end
           }
         })]
       )
@@ -142,6 +91,7 @@ export default (Vue) => {
           x: 0,
           y: 0
         },
+        _options: {},
         distance: 0,
         pulling: false,
         contentSource: new ContentSource(this.fetch, this.item, this.tombstone, Vue),
@@ -156,7 +106,7 @@ export default (Vue) => {
     },
     methods: {
       init () {
-        const opt = assign({}, options, {
+        this._options = assign({}, options, {
           prerender: this.prerender,
           remain: this.remain
         }, this.options)
@@ -165,7 +115,7 @@ export default (Vue) => {
         this.scroller = new InfiniteScroller(
           this.$list,
           this.contentSource,
-          opt
+          this._options
         )
       },
       scrollTo (top) {
@@ -180,7 +130,7 @@ export default (Vue) => {
         this.pulling = true
         this.startPointer = getEventPosition(e)
         this.$list.style.transition = 'transform .2s'
-        if (this.preventDefault && !preventDefaultException(e.target, this.options.preventDefaultException)) {
+        if (this.preventDefault && !preventDefaultException(e.target, this._options.preventDefaultException)) {
           e.preventDefault()
         }
       },
@@ -194,19 +144,19 @@ export default (Vue) => {
           return
         }
 
-        if (this.preventDefault && !preventDefaultException(e.target, this.options.preventDefaultException)) {
+        if (this.preventDefault && !preventDefaultException(e.target, this._options.preventDefaultException)) {
           e.preventDefault()
         }
 
         this.distance = Math.floor(distance * 0.5)
-        if (this.distance > this.options.distance) {
-          this.distance = this.options.distance
+        if (this.distance > this._options.distance) {
+          this.distance = this._options.distance
         }
         requestAnimationFrame(this._renderListStyle.bind(this))
       },
       _end (e) {
         if (!this.pulling) return
-        if (this.preventDefault && !preventDefaultException(e.target, this.options.preventDefaultException)) {
+        if (this.preventDefault && !preventDefaultException(e.target, this._options.preventDefaultException)) {
           e.preventDefault()
         }
         this.pulling = false
@@ -214,7 +164,7 @@ export default (Vue) => {
         this.$nextTick(() => {
           this.$list.style.transform = ''
         })
-        if (this.distance >= this.options.distance) {
+        if (this.distance >= this._options.distance) {
           this.distance = 0
           this.scroller.clear()
         }

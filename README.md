@@ -6,6 +6,7 @@ Mastering Large Lists with the vue-recyclerview
 
 ## Preview
 
+![](https://hilongjw.github.io/vue-recyclerview/preview1.jpeg)
 ![](https://hilongjw.github.io/vue-recyclerview/preview1.gif)
 
 ## Demo
@@ -112,6 +113,10 @@ export default {
 ```
 
 [Full example code](https://github.com/hilongjw/vue-recyclerview/blob/master/examples/component)
+
+## Props Options
+
+
 
 ## License
 
