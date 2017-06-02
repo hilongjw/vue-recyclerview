@@ -74,20 +74,21 @@ export default function InfiniteScroller(scroller, source, options = {}) {
 
   this.scroller_.addEventListener('scroll', this.onScroll_.bind(this))
   window.addEventListener('resize', this.onResize_.bind(this))
-
+  window.addEventListener('orientationchange', this.onResize_.bind(this))
+  
   // Create an element to force the scroller to allow scrolling to a certain
   // point.
-  this.scrollRunway_ = document.createElement('div')
+  // this.scrollRunway_ = document.createElement('div')
 
-  // Internet explorer seems to require some text in this div in order to
-  // ensure that it can be scrolled to.
-  this.scrollRunway_.textContent = ' '
-  this.scrollRunwayEnd_ = 0
-  this.scrollRunway_.style.position = 'absolute'
-  this.scrollRunway_.style.height = '1px'
-  this.scrollRunway_.style.width = '1px'
-  this.scrollRunway_.style.transition = 'transform 0.2s'
-  this.scroller_.appendChild(this.scrollRunway_)
+  // // Internet explorer seems to require some text in this div in order to
+  // // ensure that it can be scrolled to.
+  // this.scrollRunway_.textContent = ' '
+  // this.scrollRunwayEnd_ = 0
+  // this.scrollRunway_.style.position = 'absolute'
+  // this.scrollRunway_.style.height = '1px'
+  // this.scrollRunway_.style.width = '1px'
+  // this.scrollRunway_.style.transition = 'transform 0.2s'
+  // this.scroller_.appendChild(this.scrollRunway_)
   this.onResize_()
 }
 
@@ -468,8 +469,10 @@ InfiniteScroller.prototype = {
   },
 
   destroy () {
+    this.clear()
     this.scroller_.removeEventListener('scroll', this.onScroll_)
     window.removeEventListener('resize', this.onResize_)
+    window.removeEventListener('orientationchange', this.onResize_)
 
     this.firstAttachedItem_ = 0
     this.lastAttachedItem_ = 0

@@ -1,5 +1,9 @@
 import InfiniteScroller from './infinite'
-import { getEventPosition } from './util'
+import {
+  getEventPosition,
+  requestAnimationFrame,
+  preventDefaultException
+ } from './util'
 
 class ContentSource {
   constructor (fetch, itemRender, TombstoneRender, Vue) {
@@ -60,6 +64,11 @@ const Loading = {
   }
 }
 
+const options = {
+  preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|IMG)$/ },
+  distance: 50
+}
+
 export default (Vue) => {
   return {
     name: 'RecyclerView',
@@ -69,6 +78,14 @@ export default (Vue) => {
       loading: Object,
       tombstone: Object,
       prerender: Number,
+      preventDefault: {
+        type: Boolean,
+        default: false
+      },
+      options: {
+        type: Object,
+        default: () => options
+      },
       tag: {
         type: String,
         default: 'div'
@@ -86,12 +103,13 @@ export default (Vue) => {
             class: 'recyclerview'
           },
           on: {
-            touchstart: this.touchStart,
-            touchmove: this.touchMove,
-            touchend: this.touchEnd,
-            mousedown: this.touchStart,
-            mousemove: this.touchMove,
-            mouseup: this.touchEnd
+            'touchstart': this._start,
+            'touchmove': this._move,
+            'touchend': this._end,
+            'touchcancel': this._end,
+            'mousedown': this._start,
+            'mousemove': this._move,
+            'mouseup': this._end
           }
         })]
       )
@@ -129,29 +147,49 @@ export default (Vue) => {
         if (!top) top = 0
         this.$list.scrollTop = Number(top)
       },
-      touchStart (e) {
+      _renderListStyle () {
+        this.$list.style.transform = 'translate3d(0, ' + this.distance + 'px, 0)'
+      },
+      _start (e) {
         if (this.$list.scrollTop > 0) return
         this.pulling = true
         this.startPointer = getEventPosition(e)
-        this.$list.style.transition = 'transform .5s'
+        this.$list.style.transition = 'transform .2s'
+        if (this.preventDefault && !preventDefaultException(e.target, this.options.preventDefaultException)) {
+          e.preventDefault()
+        }
       },
-      touchMove (e) {
+      _move (e) {
         if (!this.pulling) return
         const pointer = getEventPosition(e)
+        const distance = pointer.y - this.startPointer.y
 
-        this.distance = (pointer.y - this.startPointer.y) * 0.5
-
-        if (this.distance > 50) {
-          this.pulling = false
-          this.distance = 50
+        if (distance < 0) {
+          this.scrollTo(-distance)
+          return
         }
 
-        this.$list.style.transform = 'translate3d(0, ' + this.distance + 'px, 0)'
+        if (this.preventDefault && !preventDefaultException(e.target, this.options.preventDefaultException)) {
+          e.preventDefault()
+        }
+
+        this.distance = Math.floor(distance * 0.5)
+        if (this.distance > this.options.distance) {
+          this.distance = this.options.distance
+        }
+        requestAnimationFrame(this._renderListStyle.bind(this))
       },
-      touchEnd (e) {
+      _end (e) {
+        if (!this.pulling) return
+        if (this.preventDefault && !preventDefaultException(e.target, this.options.preventDefaultException)) {
+          e.preventDefault()
+        }
         this.pulling = false
-        this.$list.style.transform = ''
-        if (this.distance >= 50) {
+        this.$list.style.transition = 'transform .3s'
+        this.$nextTick(() => {
+          this.$list.style.transform = ''
+        })
+        if (this.distance >= this.options.distance) {
           this.distance = 0
           this.scroller.clear()
         }

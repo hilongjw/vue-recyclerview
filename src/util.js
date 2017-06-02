@@ -3,11 +3,12 @@ const defaultPosition = {
   y: 0
 }
 
-const mouseEvent = /mouse/
+const mouseEvent = /mouse(down|move|up)/
+const touchEvent = /touch(start|move|end)/
 
 export function getEventPosition (e) {
   if (!e) return defaultPosition
-  if (e.type === 'touchmove') {
+  if (touchEvent.test(e.type)) {
     let touch = e.touches[0]
     return {
       x: touch.clientX,
@@ -20,4 +21,22 @@ export function getEventPosition (e) {
     }
   }
   return defaultPosition
+}
+
+export const requestAnimationFrame = window.requestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.mozRequestAnimationFrame ||
+  window.oRequestAnimationFrame ||
+  window.msRequestAnimationFrame ||
+  function (callback) {
+    window.setTimeout(callback, 1000 / 60)
+  }
+
+export function preventDefaultException (el, exceptions) {
+  for (let i in exceptions) {
+    if (exceptions[i].test(el[i])) {
+      return true
+    }
+  }
+  return false
 }
