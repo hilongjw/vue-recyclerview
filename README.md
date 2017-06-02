@@ -1,11 +1,12 @@
 # vue-recyclerview
 
+[![npm](https://img.shields.io/npm/v/vue-recyclerview.svg)](https://www.npmjs.com/package/vue-recyclerview)
+
 Mastering Large Lists with the vue-recyclerview
 
 ## Preview
 
 ![](https://hilongjw.github.io/vue-recyclerview/preview1.gif)
-
 
 ## Demo
 
@@ -15,31 +16,75 @@ Mastering Large Lists with the vue-recyclerview
 
 Vue 2.0 +
 
-## Install
+## Installation
 
-```bash
-npm i vue-recyclerview
+### Direct Download / CDN
 
-```
+https://unpkg.com/vue-recyclerview/dist/vue-recyclerview
+
+[unpkg.com](https://unpkg.com) provides NPM-based CDN links. The above link will always point to the latest release on NPM. You can also use a specific version/tag via URLs like https://unpkg.com/vue-recyclerview@0.0.0/dist/vue-recyclerview.js
+ 
+Include vue-recyclerview after Vue and it will install itself automatically:
 
 ```html
-<script src="https://unpkg.com/vue-recyclerview"></script>>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-recyclerview/dist/vue-recyclerview.js"></script>
 ```
 
-## Usage
+### NPM
+
+```bash
+    $ npm install vue-recyclerview
+```
+
+When used with a module system, you must explicitly install the `vue-recyclerview` via `Vue.use()`:
 
 ```javascript
-// main.js
-import RecyclerView from 'vue-recyclerview'
-Vue.use(RecyclerView)
+import Vue from 'vue'
+import VueRecyclerviewNew from 'vue-recyclerview'
+
+Vue.use(VueRecyclerviewNew)
 ```
+
+You don't need to do this when using global script tags.
+
+### Dev Build
+
+You will have to clone directly from GitHub and build `vue-recyclerview` yourself if
+you want to use the latest dev build.
+
+    $ git clone git@github.com:hilongjw/vue-recyclerview.git node_modules/vue-recyclerview
+    $ cd node_modules/vue-recyclerview
+    $ npm install
+    $ npm run build
+
+
+## Getting Started
+
+> We will be using [ES2015](https://github.com/lukehoban/es6features) in the code samples in the guide.
+
+### main.js
+
+```javascript
+// If using a module system (e.g. via vue-cli), import Vue and RecyclerView and then call Vue.use(RecyclerView).
+// import Vue from 'vue'
+// import RecyclerView from 'vue-recyclerview'
+// import App from './App.vue'
+// Vue.use(RecyclerView)
+
+// Now the app has started!
+new Vue({
+  render: h => h(App)
+}).$mount('#app')
+```
+
+### App.vue
 
 ```html
 <template>
   <div id="app">
     <RecyclerView
-      :prerender="30" 
-      key="mi" 
+      :prerender="30"
       style="height: calc(100vh - 50px)"
       :fetch="MiFetch" 
       :item="MiItem" 
@@ -54,7 +99,7 @@ import MiTomstone from './components/MiTombstone.vue'
 
 const totalCount = 1000
 
-function fetch (limit, skip) {
+function MiFetch (limit, skip) {
   limit = Math.max(30, limit)
   return query(limit, skip)
   .then(list => {
@@ -69,106 +114,16 @@ export default {
   name: 'app',
   data () {
     return {
-      MiFetch: fetch,
+      MiFetch,
       MiItem,
       MiTomstone
     }
   }
-</script>
-
-```
-
-### item
-
-```html
-<template>
-    <li class="mi-item">
-        <a class="version-item">
-            <div class="version-item-img">
-                <img class="lazy" :src="data.img_url">
-            </div>
-            <div class="version-item-intro">
-                <div class="version-item-name">
-                    <p>{{data.name}}</p>
-                </div>
-                <div class="version-item-brief">
-                    <p>{{ data.product_comment }}</p>
-                </div>
-                <div class="version-item-intro-price">
-                    <span>{{ data.price_min }}</span>
-                </div>
-            </div>
-        </a>
-    </li>
-</template>
-
-<script>
-export default {
-  props: {
-    data: Object
-  }
-}
-</script>
-
-```
-
-### tombstone
-
-```html
-<template>
-    <li class="mi-item tombstone">
-        <a class="version-item">
-            <div class="version-item-img">
-                <img class="lazy" src="//i8.mifile.cn/v1/a1/76f98ed9-86c5-dcda-0ba2-b79f62b0f195.webp?width=360&height=360">
-            </div>
-            <div class="version-item-intro">
-                <div class="version-item-name">
-                    <p></p>
-                </div>
-                <div class="version-item-brief">
-                    <p></p>
-                </div>
-                <div class="version-item-intro-price">
-                    <span>00.00</span>
-                </div>
-            </div>
-        </a>
-    </li>
-</template>
-```
-
-### loading
-
-```html
-<template>
-  <div>
-    <RecyclerView
-      :loading="Loading"
-    ></RecyclerView>
-  </div>
-</template>
-
-<script>
-// loading component
-const Loading = {
-  render (h) {
-    return h('div', {
-      attrs: {
-        class: 'recyclerview-loading'
-      }
-    }, 'Loading...')
-  }
-}
-
-export default {
-  data () {
-    return {
-      Loading: Loading
-    }
-  }
 }
 </script>
 ```
+
+[full example code](https://github.com/hilongjw/vue-recyclerview/blob/master/examples/component)
 
 ## License
 

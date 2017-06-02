@@ -7,4 +7,11 @@ function install (Vue, options = {}) {
   return component
 }
 
-export default install
+export default {
+  install
+}
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(install)
+}
+
