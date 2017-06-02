@@ -23,7 +23,7 @@ npm i vue-recyclerview
 ```
 
 ```html
-<script src="https://unpkg.com/vue-recyclerview"></script>>
+<script src="https://unpkg.com/vue-recyclerview"></script>
 ```
 
 ## Usage
