@@ -2,7 +2,8 @@ import InfiniteScroller from './infinite'
 import {
   getEventPosition,
   requestAnimationFrame,
-  preventDefaultException
+  preventDefaultException,
+  assign
  } from './util'
 
 class ContentSource {
@@ -64,9 +65,29 @@ const Loading = {
   }
 }
 
+const Tombstone = {
+  render (h) {
+    return h('div', {
+      attrs: {
+        class: 'recyclerview-item tombstone'
+      },
+      style: {
+        height: '100px',
+        width: '100%'
+      }
+    }, '')
+  }
+}
+
 const options = {
   preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|IMG)$/ },
-  distance: 50
+  distance: 50,
+  animation_duration_ms: 200,
+  tombstone_class: 'tombstone',
+  invisible_class: 'invisible',
+  prerender: 20,
+  remain: 10,
+  preventDefault: false
 }
 
 export default (Vue) => {
@@ -76,12 +97,13 @@ export default (Vue) => {
       fetch: Function,
       item: Object,
       loading: Object,
-      tombstone: Object,
-      prerender: Number,
-      preventDefault: {
-        type: Boolean,
-        default: false
+      tombstone: {
+        type: Object,
+        default: () => Tombstone
       },
+      prerender: Number,
+      remain: Number,
+      preventDefault: Boolean,
       options: {
         type: Object,
         default: () => options
@@ -134,17 +156,20 @@ export default (Vue) => {
     },
     methods: {
       init () {
+        const opt = assign({}, options, {
+          prerender: this.prerender,
+          remain: this.remain
+        }, this.options)
+
         this.$list = this.$el.querySelector('.recyclerview')
         this.scroller = new InfiniteScroller(
           this.$list,
           this.contentSource,
-          {
-            RUNWAY_ITEMS: this.prerender
-          }
+          opt
         )
       },
       scrollTo (top) {
-        if (!top) top = 0
+        top = top || 0
         this.$list.scrollTop = Number(top)
       },
       _renderListStyle () {

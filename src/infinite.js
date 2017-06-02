@@ -17,23 +17,6 @@
  * Author surma https://github.com/surma
  * Modified by Awe @hilongjw
  */
-
-// Number of items to instantiate beyond current view in the scroll direction.
-var RUNWAY_ITEMS = 10
-
-// Number of items to instantiate beyond current view in the opposite direction.
-var RUNWAY_ITEMS_OPPOSITE = 10
-
-// The number of pixels of additional length to allow scrolling to.
-var SCROLL_RUNWAY = 2000
-
-// The animation interval (in ms) for fading in content from tombstones.
-var ANIMATION_DURATION_MS = 200
-
-var TOMBSTONE_CLASS = 'tombstone'
-
-var INVISIBLE_CLASS = 'invisible'
-
 const MAX_COUNT = Infinity
 
 /**
@@ -43,13 +26,18 @@ const MAX_COUNT = Infinity
  * @param {InfiniteScrollerSource} source A provider of the content to be
  *     displayed in the infinite scroll region.
  */
-export default function InfiniteScroller(scroller, source, options = {}) {
-  this.RUNWAY_ITEMS = options.RUNWAY_ITEMS || RUNWAY_ITEMS
-  this.RUNWAY_ITEMS_OPPOSITE = options.RUNWAY_ITEMS_OPPOSITE || RUNWAY_ITEMS_OPPOSITE
-  this.SCROLL_RUNWAY = options.SCROLL_RUNWAY || SCROLL_RUNWAY
-  this.ANIMATION_DURATION_MS = options.ANIMATION_DURATION_MS || ANIMATION_DURATION_MS
-  this.TOMBSTONE_CLASS = options.TOMBSTONE_CLASS || TOMBSTONE_CLASS
-  this.INVISIBLE_CLASS = options.INVISIBLE_CLASS || INVISIBLE_CLASS
+export default function InfiniteScroller (scroller, source, options) {
+  // Number of items to instantiate beyond current view in the opposite direction.
+  this.RUNWAY_ITEMS = options.prerender
+  // Number of items to instantiate beyond current view in the opposite direction.
+  this.RUNWAY_ITEMS_OPPOSITE = options.remain
+  // The number of pixels of additional length to allow scrolling to.
+  // this.SCROLL_RUNWAY = options.SCROLL_RUNWAY || SCROLL_RUNWAY
+
+  // The animation interval (in ms) for fading in content from tombstones.
+  this.ANIMATION_DURATION_MS = options.animation_duration_ms
+  this.TOMBSTONE_CLASS = options.tombstone_class
+  this.INVISIBLE_CLASS = options.invisible_class
   this.MAX_COUNT = MAX_COUNT
 
   this.anchorItem = {
