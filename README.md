@@ -22,7 +22,7 @@ Vue 2.0 +
 
 https://unpkg.com/vue-recyclerview/dist/vue-recyclerview
 
-[unpkg.com](https://unpkg.com) provides NPM-based CDN links. The above link will always point to the latest release on NPM. You can also use a specific version/tag via URLs like https://unpkg.com/vue-recyclerview@0.0.0/dist/vue-recyclerview.js
+[unpkg.com](https://unpkg.com) provides NPM-based CDN links. The above link will always point to the latest release on NPM. You can also use a specific version/tag via URLs like https://unpkg.com/vue-recyclerview/dist/vue-recyclerview.js
  
 Include vue-recyclerview after Vue and it will install itself automatically:
 
@@ -94,21 +94,9 @@ new Vue({
 </template>
 
 <script>
-import MiItem from './components/MiItem.vue'
-import MiTomstone from './components/MiTombstone.vue'
-
-const totalCount = 1000
-
-function MiFetch (limit, skip) {
-  limit = Math.max(30, limit)
-  return query(limit, skip)
-  .then(list => {
-    return {
-      list: list,
-      count: totalCount
-    }
-  })
-}
+import MiItem from './MiItem.vue'
+import MiTomstone from './MiTombstone.vue'
+import MiFetch from './mi-fetch'
 
 export default {
   name: 'app',
@@ -123,7 +111,7 @@ export default {
 </script>
 ```
 
-[full example code](https://github.com/hilongjw/vue-recyclerview/blob/master/examples/component)
+[Full example code](https://github.com/hilongjw/vue-recyclerview/blob/master/examples/component)
 
 ## License
 
