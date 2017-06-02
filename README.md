@@ -116,6 +116,31 @@ export default {
 
 ## Props Options
 
+### fetch : Function
+
+@params limit Number
+@params skip Number
+
+return Promise { count: Number, list: Array }
+
+
+### prerender : Number
+
+Number of items to instantiate beyond current view in the opposite direction.
+
+
+### remain : Number
+
+Number of items to instantiate beyond current view in the opposite direction.
+
+
+### item : Vue Component
+
+
+### tombstone : Vue Component
+
+
+### loading : Vue Component
 
 
 ## License
