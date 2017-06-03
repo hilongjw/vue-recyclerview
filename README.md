@@ -142,6 +142,16 @@ Number of items to instantiate beyond current view in the opposite direction.
 ### loading : Vue Component
 
 
+## Instance Method
+
+### scrollToIndex
+
+```javascript
+const index = 100
+this.$refs.RecyclerView.scrollToIndex(index)
+
+```
+
 ## License
 
 [MIT](https://github.com/hilongjw/vue-recyclerview/blob/master/License)
