@@ -26,7 +26,7 @@ const MAX_COUNT = Infinity
  * @param {InfiniteScrollerSource} source A provider of the content to be
  *     displayed in the infinite scroll region.
  */
-export default function InfiniteScroller (scroller, source, options) {
+export default function InfiniteScroller (scroller, list, source, options) {
   // Number of items to instantiate beyond current view in the opposite direction.
   this.RUNWAY_ITEMS = options.prerender
   // Number of items to instantiate beyond current view in the opposite direction.
@@ -52,9 +52,13 @@ export default function InfiniteScroller (scroller, source, options) {
   this.tombstones_ = []
   this.scroller_ = scroller
   this.source_ = source
-  this.items_ = []
+  this.items_ = list || []
   this.loadedItems_ = 0
   this.requestInProgress_ = false
+
+  if (!this.source_.fetch) {
+    this.setItems(list)
+  }
 
   this.curPos = 0
   this.unusedNodes = []
@@ -390,6 +394,12 @@ InfiniteScroller.prototype = {
     this.maybeRequestContent()
   },
 
+  setItems (list) {
+    list = list || []
+    this.items_ = list
+    this.MAX_COUNT = list.length
+  },
+
   scrollToIndex (index) {
     this.fill(0, index + 1)
   },
@@ -420,6 +430,7 @@ InfiniteScroller.prototype = {
     var itemsNeeded = this.lastAttachedItem_ - this.loadedItems_;
     if (itemsNeeded <= 0) return
     this.requestInProgress_ = true
+    if (!this.source_.fetch) return
     this.source_.fetch(itemsNeeded, this.loadedItems_).then(data => {
       this.MAX_COUNT = data.count
       this.addContent(data.list)

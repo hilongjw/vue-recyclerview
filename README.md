@@ -115,31 +115,58 @@ export default {
 
 ## Props Options
 
-### fetch : Function
+### fetch:Function
 
 @params limit Number
 @params skip Number
 
 return Promise { count: Number, list: Array }
 
+### list:Array
 
-### prerender : Number
+RecyclerView list data
+
+```javascript
+[
+// item
+{
+  vm: vm, // <Vue Instance>
+  data: {
+    name: 'test'
+  },
+  node: null,
+  height: 100,
+  width: 100,
+  top: 0,
+}, 
+// tombstone
+{
+  vm: null
+  data: null,
+  node: null,
+  height: 100,
+  width: 100,
+  top: 0,
+}]
+```
+
+### prerender:Number
 
 Number of items to instantiate beyond current view in the opposite direction.
 
 
-### remain : Number
+### remain:Number
 
 Number of items to instantiate beyond current view in the opposite direction.
 
 
-### item : Vue Component
+### item:Vue Component
 
 
-### tombstone : Vue Component
+### tombstone:Vue Component
 
 
-### loading : Vue Component
+### loading:Vue Component
 
 
 ## Instance Method

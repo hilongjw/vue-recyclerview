@@ -115,6 +115,7 @@ export default (Vue) => {
         this.$list = this.$el.querySelector('.recyclerview')
         this.scroller = new InfiniteScroller(
           this.$list,
+          this.list,
           this.contentSource,
           this._options
         )
