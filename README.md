@@ -115,16 +115,32 @@ export default {
 
 ## Props Options
 
-### fetch:Function
+|key|description|defualt|type/options|
+|:---|---|---|---|
+| `fetch`|Data fetching function |||
+|`list`|List data of RecyclerView|[]|
+|`prerender`|Number of items to instantiate beyond current view in the opposite direction.|20|Number|
+|`remain`|Number of items to instantiate beyond current view in the opposite direction.|10|Number|
+|`column`|Specifies how many columns the listings should be displayed in|1|Number|
+|`item`|The Vue component of RecyclerView's item||Vue component|
+|`tombstone`|The Vue component of RecyclerView's tombstone||Vue component|
+|`loading`|The loading component behind the RecyclerView pull-to-refresh ||Vue component|
 
-@params limit Number
-@params skip Number
 
-return Promise { count: Number, list: Array }
+- fetch:Function
 
-### list:Array
+```
+function fetch (limit:Number, skip:Number) {
+  return Promise.resolve({
+    list: list // Array,
+    count: count // Number
+  })
+}
 
-RecyclerView list data
+```
+
+- list
+
 
 ```javascript
 [
@@ -150,35 +166,12 @@ RecyclerView list data
 }]
 ```
 
-- prerender:Number
-
-Number of items to instantiate beyond current view in the opposite direction.
-
-
-- remain:Number
-
-Number of items to instantiate beyond current view in the opposite direction.
-
-- column:Number
-
-Specifies how many columns the listings should be displayed in, default is 1
-
-- item:Vue Component
-
-
-- tombstone:Vue Component
-
-
-- loading:Vue Component
-
-
 ## Instance Method
 
 - scrollToIndex
 
 ```javascript
-const index = 100
-this.$refs.RecyclerView.scrollToIndex(index)
+this.$refs.RecyclerView.scrollToIndex(100)
 
 ```
 
