@@ -16,6 +16,7 @@
   },
   "unpkg": "dist/vue-recyclerview.js",
   "files": [
+    "README.md"
     "src",
     "dist/*.js"
   ],
