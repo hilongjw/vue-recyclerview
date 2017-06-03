@@ -47,6 +47,7 @@ export default (Vue) => {
     name: 'RecyclerView',
     props: {
       fetch: Function,
+      list: Array,
       item: Object,
       loading: Object,
       tombstone: {
@@ -118,9 +119,19 @@ export default (Vue) => {
           this._options
         )
       },
-      scrollTo (top) {
+      scrollToIndex (index) {
+        index = Number(index)
+        this.scroller.scrollToIndex(index)
+        this.$nextTick(() => {
+          this._scrollToBottom()
+        })
+      },
+      _scrollTo (top) {
         top = top || 0
         this.$list.scrollTop = Number(top)
+      },
+      _scrollToBottom () {
+        this._scrollTo(this.$list.scrollHeight)
       },
       _renderListStyle () {
         this.$list.style.transform = 'translate3d(0, ' + this.distance + 'px, 0)'

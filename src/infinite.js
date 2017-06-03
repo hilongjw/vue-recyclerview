@@ -205,18 +205,33 @@ InfiniteScroller.prototype = {
         continue
       }
       if (this.items_[i].vm) {
-        this.items_[i].vm.$destroy()
+        this.clearItem(this.items_[i])
+      } else {
+        this.clearTombstone(this.items_[i])
       }
-      if (this.items_[i].node) {
-        if (this.items_[i].node.classList.contains(this.TOMBSTONE_CLASS)) {
-          this.tombstones_.push(this.items_[i].node)
-          this.tombstones_[this.tombstones_.length - 1].classList.add(this.INVISIBLE_CLASS)
-        } else {
-          this.unusedNodes.push(this.items_[i].node)
-        }
-      }
+
       this.items_[i].vm = null
       this.items_[i].node = null
+    }
+  },
+
+  clearItem (item) {
+    if (item.vm) {
+      item.vm.$destroy()
+      if (item.node) {
+        this.unusedNodes.push(item.node)
+      }
+    }
+  },
+
+  clearTombstone (item) {
+    if (item.node) {
+      if (item.node.classList.contains(this.TOMBSTONE_CLASS)) {
+        this.tombstones_.push(item.node)
+        this.tombstones_[this.tombstones_.length - 1].classList.add(this.INVISIBLE_CLASS)
+      } else {
+        this.unusedNodes.push(item.node)
+      }
     }
   },
 
@@ -316,7 +331,11 @@ InfiniteScroller.prototype = {
           continue
         }
       }
-      node = this.items_[i].data ? this.source_.render(this.items_[i].data, (this.unusedNodes.pop() || this.baseNode.cloneNode(true)), this.items_[i]) : this.getTombstone()
+      if (this.items_[i].data) {
+        node = this.source_.render(this.items_[i].data, (this.unusedNodes.pop() || this.baseNode.cloneNode(true)), this.items_[i])
+      } else {
+        node = this.getTombstone()
+      }
       // Maybe don't do this if it's already attached?
       node.style.position = 'absolute'
       this.items_[i].top = -1
@@ -371,6 +390,10 @@ InfiniteScroller.prototype = {
     this.maybeRequestContent()
   },
 
+  scrollToIndex (index) {
+    this.fill(0, index + 1)
+  },
+
   setScrollRunway () {
     this.scrollRunwayEnd_ = Math.max(this.scrollRunwayEnd_, this.curPos + this.SCROLL_RUNWAY)
     this.scrollRunway_.style.transform = 'translate(0, ' + this.scrollRunwayEnd_ + 'px)'
@@ -397,7 +420,7 @@ InfiniteScroller.prototype = {
     var itemsNeeded = this.lastAttachedItem_ - this.loadedItems_;
     if (itemsNeeded <= 0) return
     this.requestInProgress_ = true
-    this.source_.fetch(itemsNeeded, this.items_.length).then(data => {
+    this.source_.fetch(itemsNeeded, this.loadedItems_).then(data => {
       this.MAX_COUNT = data.count
       this.addContent(data.list)
     })
@@ -425,7 +448,6 @@ InfiniteScroller.prototype = {
    */
   addContent (items) {
     this.requestInProgress_ = false
-    var startIndex = this.items_.length
 
     let index
     for (var i = 0; i < items.length; i++) {
@@ -436,7 +458,6 @@ InfiniteScroller.prototype = {
         index = this.loadedItems_++
         this.items_[index].data = items[i]
       }
-      
     }
 
     this.attachContent()
