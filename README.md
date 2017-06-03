@@ -150,28 +150,31 @@ RecyclerView list data
 }]
 ```
 
-### prerender:Number
+- prerender:Number
 
 Number of items to instantiate beyond current view in the opposite direction.
 
 
-### remain:Number
+- remain:Number
 
 Number of items to instantiate beyond current view in the opposite direction.
 
+- column:Number
 
-### item:Vue Component
+Specifies how many columns the listings should be displayed in, default is 1
+
+- item:Vue Component
 
 
-### tombstone:Vue Component
+- tombstone:Vue Component
 
 
-### loading:Vue Component
+- loading:Vue Component
 
 
 ## Instance Method
 
-### scrollToIndex
+- scrollToIndex
 
 ```javascript
 const index = 100

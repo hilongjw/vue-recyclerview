@@ -39,7 +39,8 @@ const options = {
   invisible_class: 'invisible',
   prerender: 20,
   remain: 10,
-  preventDefault: false
+  preventDefault: false,
+  column: 1
 }
 
 export default (Vue) => {
@@ -54,6 +55,7 @@ export default (Vue) => {
         type: Object,
         default: () => Tombstone
       },
+      column: Number,
       prerender: Number,
       remain: Number,
       preventDefault: Boolean,
@@ -109,13 +111,15 @@ export default (Vue) => {
       init () {
         this._options = assign({}, options, {
           prerender: this.prerender,
-          remain: this.remain
+          remain: this.remain,
+          column: this.column
         }, this.options)
 
         this.$list = this.$el.querySelector('.recyclerview')
         this.scroller = new InfiniteScroller(
           this.$list,
           this.list,
+          this._options.column,
           this.contentSource,
           this._options
         )
@@ -152,7 +156,7 @@ export default (Vue) => {
         const distance = pointer.y - this.startPointer.y
 
         if (distance < 0) {
-          this.scrollTo(-distance)
+          this._scrollTo(-distance)
           return
         }
 

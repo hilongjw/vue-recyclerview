@@ -26,7 +26,7 @@ const MAX_COUNT = Infinity
  * @param {InfiniteScrollerSource} source A provider of the content to be
  *     displayed in the infinite scroll region.
  */
-export default function InfiniteScroller (scroller, list, source, options) {
+export default function InfiniteScroller (scroller, list, column, source, options) {
   // Number of items to instantiate beyond current view in the opposite direction.
   this.RUNWAY_ITEMS = options.prerender
   // Number of items to instantiate beyond current view in the opposite direction.
@@ -39,6 +39,7 @@ export default function InfiniteScroller (scroller, list, source, options) {
   this.TOMBSTONE_CLASS = options.tombstone_class
   this.INVISIBLE_CLASS = options.invisible_class
   this.MAX_COUNT = MAX_COUNT
+  this.column = column || 1
 
   this.anchorItem = {
     index: 0,
@@ -98,7 +99,7 @@ InfiniteScroller.prototype = {
     tombstone.style.position = 'absolute'
     this.scroller_.appendChild(tombstone)
     tombstone.classList.remove(this.INVISIBLE_CLASS)
-    this.tombstoneSize_ = tombstone.offsetHeight
+    this.tombstoneSize_ = tombstone.offsetHeight / this.column
     this.tombstoneWidth_ = tombstone.offsetWidth
     this.scroller_.removeChild(tombstone)
 
@@ -170,7 +171,7 @@ InfiniteScroller.prototype = {
     i += tombstones
     delta -= tombstones * this.tombstoneSize_
     return {
-      index: i,
+      index: Math.floor(i / this.column) * this.column,
       offset: delta
     }
   },
@@ -271,9 +272,11 @@ InfiniteScroller.prototype = {
   tombstoneLayout (tombstoneAnimations) {
     let i
     let anim
+    let x
     for (i in tombstoneAnimations) {
       anim = tombstoneAnimations[i]
-      this.items_[i].node.style.transform = 'translateY(' + (this.anchorScrollTop + anim[1]) + 'px) scale(' + (this.tombstoneWidth_ / this.items_[i].width) + ', ' + (this.tombstoneSize_ / this.items_[i].height) + ')'
+      x = (i % this.column) * this.items_[i].width
+      this.items_[i].node.style.transform = 'translate3d(' + x + 'px,' + (this.anchorScrollTop + anim[1]) * this.column + 'px, 0) scale(' + (this.tombstoneWidth_ / this.items_[i].width) + ', ' + (this.tombstoneSize_ / this.items_[i].height) + ')'
       // Call offsetTop on the nodes to be animated to force them to apply current transforms.
       this.items_[i].node.offsetTop
       anim[0].offsetTop
@@ -284,20 +287,23 @@ InfiniteScroller.prototype = {
   itemLayout (tombstoneAnimations) {
     let i
     let anim
-
+    let x = 0
     for (i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       anim = tombstoneAnimations[i]
+      x = (i % this.column) * (this.items_[i].width || this.tombstoneWidth_)
       if (anim) {
         anim[0].style.transition = 'transform ' + this.ANIMATION_DURATION_MS + 'ms, opacity ' + this.ANIMATION_DURATION_MS + 'ms'
-        anim[0].style.transform = 'translateY(' + this.curPos + 'px) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')'
+        anim[0].style.transform = 'translate3d(' + x + 'px,' + this.curPos + 'px, 0) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')'
         anim[0].style.opacity = 0
       }
       if (this.curPos !== this.items_[i].top) {
         if (!anim) this.items_[i].node.style.transition = ''
-        this.items_[i].node.style.transform = 'translateY(' + this.curPos + 'px)'
+        this.items_[i].node.style.transform = 'translate3d('+ x + 'px,' + this.curPos + 'px, 0)'
       }
       this.items_[i].top = this.curPos
-      this.curPos += this.items_[i].height || this.tombstoneSize_
+      if ((i + 1) % this.column === 0) {
+        this.curPos += (this.items_[i].height | this.tombstoneSize_) * this.column
+      }
     }
   },
 
@@ -359,7 +365,7 @@ InfiniteScroller.prototype = {
     for (let i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       // cacheItemsHeight
       if (this.items_[i].data && !this.items_[i].height) {
-        this.items_[i].height = this.items_[i].node.offsetHeight
+        this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         this.items_[i].width = this.items_[i].node.offsetWidth
       }
     }
