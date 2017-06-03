@@ -6,7 +6,7 @@ Mastering Large Lists with the vue-recyclerview
 
 ## Preview
 
-![](https://hilongjw.github.io/vue-recyclerview/preview2.gif)
+![](https://hilongjw.github.io/vue-recyclerview/preview3.gif)
 
 ## Demo
 
