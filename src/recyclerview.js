@@ -119,7 +119,6 @@ export default (Vue) => {
         this.scroller = new InfiniteScroller(
           this.$list,
           this.list,
-          this._options.column,
           this.contentSource,
           this._options
         )

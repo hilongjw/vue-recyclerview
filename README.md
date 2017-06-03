@@ -124,7 +124,7 @@ export default {
 |`column`|Specifies how many columns the listings should be displayed in|1|Number|
 |`item`|The Vue component of RecyclerView's item||Vue component|
 |`tombstone`|The Vue component of RecyclerView's tombstone||Vue component|
-|`loading`|The loading component behind the RecyclerView pull-to-refresh ||Vue component|
+|`loading`|The loading component behind the RecyclerView pull-to-refresh |built-in loading|Vue component|
 
 
 - fetch:Function

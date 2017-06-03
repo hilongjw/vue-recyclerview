@@ -26,7 +26,7 @@ const MAX_COUNT = Infinity
  * @param {InfiniteScrollerSource} source A provider of the content to be
  *     displayed in the infinite scroll region.
  */
-export default function InfiniteScroller (scroller, list, column, source, options) {
+export default function InfiniteScroller (scroller, list, source, options) {
   // Number of items to instantiate beyond current view in the opposite direction.
   this.RUNWAY_ITEMS = options.prerender
   // Number of items to instantiate beyond current view in the opposite direction.
@@ -39,7 +39,7 @@ export default function InfiniteScroller (scroller, list, column, source, option
   this.TOMBSTONE_CLASS = options.tombstone_class
   this.INVISIBLE_CLASS = options.invisible_class
   this.MAX_COUNT = MAX_COUNT
-  this.column = column || 1
+  this.column = options.column || 1
 
   this.anchorItem = {
     index: 0,
@@ -106,6 +106,7 @@ InfiniteScroller.prototype = {
     // Reset the cached size of items in the scroller as they may no longer be
     // correct after the item content undergoes layout.
     for (var i = 0; i < this.items_.length; i++) {
+      this.items_[i].top = -1
       this.items_[i].height = this.items_[i].width = 0
     }
     this.onScroll_()
@@ -318,7 +319,11 @@ InfiniteScroller.prototype = {
     let newNodes = []
     let i
 
-    if (this.lastAttachedItem_ > this.MAX_COUNT) this.lastAttachedItem_ = this.MAX_COUNT - 1
+    const last = Math.floor((this.lastAttachedItem_ + this.RUNWAY_ITEMS) / this.column) * this.column
+
+    if (last > this.MAX_COUNT) {
+      this.lastAttachedItem_ = this.MAX_COUNT
+    }
     // Create DOM nodes.
     for (i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       while (this.items_.length <= i) {
@@ -464,6 +469,7 @@ InfiniteScroller.prototype = {
    *     scroller list.
    */
   addContent (items) {
+    if (!items.length) return
     this.requestInProgress_ = false
 
     let index
