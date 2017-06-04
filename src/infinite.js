@@ -320,7 +320,9 @@ InfiniteScroller.prototype = {
 
     for (i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       anim = tombstoneAnimations[i]
-      curPosList = this.posList[Math.floor(i / this.column)].slice()
+      if (this.waterflow) {
+        curPosList = this.posList[Math.floor(i / this.column)].slice()
+      }
       x = (i % this.column) * (this.items_[i].width || this.tombstoneWidth_)
       y = this.waterflow ? curPosList[i % this.column] : this.curPos
       if (anim) {
@@ -337,7 +339,6 @@ InfiniteScroller.prototype = {
         this.curPos += (this.items_[i].height | this.tombstoneSize_) * this.column
       }
       if (this.waterflow) {
-        // curPosList[i % this.column] = curPosList[i % this.column] + (this.items_[i].height | this.tombstoneSize_) * this.column
         if (this.posList[Math.floor(i / this.column) + 1]) {
           this.posList[Math.floor(i / this.column) + 1][i % this.column] = curPosList[i % this.column] + (this.items_[i].height) * this.column
         } else {

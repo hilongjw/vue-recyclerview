@@ -59,6 +59,7 @@ export default (Vue) => {
       column: Number,
       prerender: Number,
       remain: Number,
+      waterflow: Boolean,
       preventDefault: Boolean,
       options: Object,
       tag: {
@@ -114,7 +115,7 @@ export default (Vue) => {
           prerender: this.prerender,
           remain: this.remain,
           column: this.column,
-          waterflow: true // this.waterflow
+          waterflow: this.waterflow
         }, this.options)
 
         this.$list = this.$el.querySelector('.recyclerview')

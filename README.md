@@ -4,6 +4,12 @@
 
 Mastering Large Lists with the vue-recyclerview
 
+## Feature
+
+- DOM recyleing
+- Multiple column
+- Waterflow
+
 ## Preview
 
 ![](https://hilongjw.github.io/vue-recyclerview/preview3.gif)
