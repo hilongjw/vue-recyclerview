@@ -1,6 +1,6 @@
 {
   "name": "vue-recyclerview",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Mastering Large Lists with the vue-recyclerview",
   "main": "dist/vue-recyclerview.js",
   "directories": {
@@ -16,7 +16,7 @@
   },
   "unpkg": "dist/vue-recyclerview.js",
   "files": [
-    "README.md"
+    "README.md",
     "src",
     "dist/*.js"
   ],

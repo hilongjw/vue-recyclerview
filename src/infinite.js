@@ -17,6 +17,8 @@
  * Author surma https://github.com/surma
  * Modified by Awe @hilongjw
  */
+import { inView } from './util'
+
 const MAX_COUNT = Infinity
 
 /**
@@ -40,6 +42,7 @@ export default function InfiniteScroller (scroller, list, source, options) {
   this.INVISIBLE_CLASS = options.invisible_class
   this.MAX_COUNT = MAX_COUNT
   this.column = options.column || 1
+  this.waterflow = options.waterflow
 
   this.anchorItem = {
     index: 0,
@@ -171,6 +174,7 @@ InfiniteScroller.prototype = {
     }
     i += tombstones
     delta -= tombstones * this.tombstoneSize_
+    i = Math.min(i, this.MAX_COUNT - 1)
     return {
       index: Math.floor(i / this.column) * this.column,
       offset: delta
@@ -205,19 +209,34 @@ InfiniteScroller.prototype = {
   },
 
   getUnUsedNodes () {
-    for (let i = 0; i < this.items_.length; i++) {
-      if (i === this.firstAttachedItem_) {
-        i = this.lastAttachedItem_ - 1
-        continue
-      }
-      if (this.items_[i].vm) {
-        this.clearItem(this.items_[i])
-      } else {
-        this.clearTombstone(this.items_[i])
-      }
+    if (this.waterflow) {
+      for (let i = 0; i < this.items_.length; i++) {
+        if (this.items_[i].node && !inView(this.items_[i].node)) {
+          if (this.items_[i].vm) {
+            this.clearItem(this.items_[i])
+          } else {
+            this.clearTombstone(this.items_[i])
+          }
 
-      this.items_[i].vm = null
-      this.items_[i].node = null
+          this.items_[i].vm = null
+          this.items_[i].node = null
+        }
+      }
+    } else {
+      for (let i = 0; i < this.items_.length; i++) {
+        if (i === this.firstAttachedItem_) {
+          i = this.lastAttachedItem_ - 1
+          continue
+        }
+        if (this.items_[i].vm) {
+          this.clearItem(this.items_[i])
+        } else {
+          this.clearTombstone(this.items_[i])
+        }
+
+        this.items_[i].vm = null
+        this.items_[i].node = null
+      }
     }
   },
 
@@ -252,6 +271,7 @@ InfiniteScroller.prototype = {
     // that we didn't used to know.
     // TODO: We should only need to do this when a height of an item becomes
     // known above.
+
     this.anchorScrollTop = 0
     for (let i = 0; i < this.anchorItem.index; i++) {
       this.anchorScrollTop += this.items_[i].height || this.tombstoneSize_
@@ -289,21 +309,40 @@ InfiniteScroller.prototype = {
     let i
     let anim
     let x = 0
+    let y = 0
+    let curPosList
+    
+    if (this.waterflow && !this.posList) {
+      this.posList = {
+        0: Array.from({ length: this.column }).map(i => 0)
+      }
+    }
+
     for (i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       anim = tombstoneAnimations[i]
+      curPosList = this.posList[Math.floor(i / this.column)].slice()
       x = (i % this.column) * (this.items_[i].width || this.tombstoneWidth_)
+      y = this.waterflow ? curPosList[i % this.column] : this.curPos
       if (anim) {
         anim[0].style.transition = 'transform ' + this.ANIMATION_DURATION_MS + 'ms, opacity ' + this.ANIMATION_DURATION_MS + 'ms'
-        anim[0].style.transform = 'translate3d(' + x + 'px,' + this.curPos + 'px, 0) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')'
+        anim[0].style.transform = 'translate3d(' + x + 'px,' + y + 'px, 0) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')'
         anim[0].style.opacity = 0
       }
       if (this.curPos !== this.items_[i].top) {
         if (!anim) this.items_[i].node.style.transition = ''
-        this.items_[i].node.style.transform = 'translate3d('+ x + 'px,' + this.curPos + 'px, 0)'
+        this.items_[i].node.style.transform = 'translate3d('+ x + 'px,' + y + 'px, 0)'
       }
       this.items_[i].top = this.curPos
       if ((i + 1) % this.column === 0) {
         this.curPos += (this.items_[i].height | this.tombstoneSize_) * this.column
+      }
+      if (this.waterflow) {
+        // curPosList[i % this.column] = curPosList[i % this.column] + (this.items_[i].height | this.tombstoneSize_) * this.column
+        if (this.posList[Math.floor(i / this.column) + 1]) {
+          this.posList[Math.floor(i / this.column) + 1][i % this.column] = curPosList[i % this.column] + (this.items_[i].height) * this.column
+        } else {
+          this.posList[Math.floor(i / this.column) + 1] = curPosList.slice()
+        }
       }
     }
   },
