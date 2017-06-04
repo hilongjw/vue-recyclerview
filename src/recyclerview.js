@@ -41,7 +41,7 @@ const options = {
   remain: 10,
   preventDefault: false,
   column: 1,
-  waterflow: true
+  waterflow: false
 }
 
 export default (Vue) => {
@@ -112,10 +112,10 @@ export default (Vue) => {
     methods: {
       init () {
         this._options = assign({}, options, {
-          prerender: this.prerender,
-          remain: this.remain,
-          column: this.column,
-          waterflow: this.waterflow
+          prerender: this.prerender || options.prerender,
+          remain: this.remain || options.remain,
+          column: this.column || options.column,
+          waterflow: this.waterflow || options.waterflow
         }, this.options)
 
         this.$list = this.$el.querySelector('.recyclerview')

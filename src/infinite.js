@@ -314,7 +314,7 @@ InfiniteScroller.prototype = {
     
     if (this.waterflow && !this.posList) {
       this.posList = {
-        0: Array.from({ length: this.column }).map(i => 0)
+        0: Array.from({ length: this.column }).map(i => this.curPos)
       }
     }
 
@@ -340,7 +340,7 @@ InfiniteScroller.prototype = {
       }
       if (this.waterflow) {
         if (this.posList[Math.floor(i / this.column) + 1]) {
-          this.posList[Math.floor(i / this.column) + 1][i % this.column] = curPosList[i % this.column] + (this.items_[i].height) * this.column
+          this.posList[Math.floor(i / this.column) + 1][i % this.column] = curPosList[i % this.column] + (this.items_[i].height || this.tombstoneWidth_) * this.column
         } else {
           this.posList[Math.floor(i / this.column) + 1] = curPosList.slice()
         }
@@ -452,7 +452,8 @@ InfiniteScroller.prototype = {
   },
 
   scrollToIndex (index) {
-    this.fill(0, index + 1)
+    const commonItemCount = this.lastAttachedItem_ - this.firstAttachedItem_
+    this.fill(index - commonItemCount, index + 1)
   },
 
   setScrollRunway () {
