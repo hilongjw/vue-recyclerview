@@ -108,6 +108,7 @@ export default (Vue) => {
     },
     beforeDestroy () {
       this.scroller.destroy()
+      this.scroller = null
     },
     methods: {
       init () {
@@ -127,6 +128,14 @@ export default (Vue) => {
         )
       },
       scrollToIndex (index) {
+        if (this.waterflow) {
+          for (let i = 0, len = this.scroller.items_.length; i < len; i++) {
+            if (i === index) {
+              this._scrollTo(this.scroller.items_[i].top - this.scroller.items_[i].height * this._options.column + this.$list.offsetWidth)
+            }
+          }
+          return
+        }
         index = Number(index)
         this.scroller.scrollToIndex(index)
         this.$nextTick(() => {

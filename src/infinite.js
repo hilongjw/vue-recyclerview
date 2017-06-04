@@ -48,6 +48,7 @@ export default function InfiniteScroller (scroller, list, source, options) {
     index: 0,
     offset: 0
   }
+  this.timer = null
   this.firstAttachedItem_ = 0
   this.lastAttachedItem_ = 0
   this.anchorScrollTop = 0
@@ -154,7 +155,7 @@ InfiniteScroller.prototype = {
    *     scroll should be anchored to.
    */
   calculateAnchoredItem (initialAnchor, delta) {
-    if (delta == 0) return initialAnchor
+    if (delta === 0) return initialAnchor
     delta += initialAnchor.offset
     var i = initialAnchor.index
     var tombstones = 0
@@ -175,6 +176,7 @@ InfiniteScroller.prototype = {
     i += tombstones
     delta -= tombstones * this.tombstoneSize_
     i = Math.min(i, this.MAX_COUNT - 1)
+
     return {
       index: Math.floor(i / this.column) * this.column,
       offset: delta
@@ -217,7 +219,6 @@ InfiniteScroller.prototype = {
           } else {
             this.clearTombstone(this.items_[i])
           }
-
           this.items_[i].vm = null
           this.items_[i].node = null
         }
@@ -340,7 +341,7 @@ InfiniteScroller.prototype = {
       }
       if (this.waterflow) {
         if (this.posList[Math.floor(i / this.column) + 1]) {
-          this.posList[Math.floor(i / this.column) + 1][i % this.column] = curPosList[i % this.column] + (this.items_[i].height || this.tombstoneWidth_) * this.column
+          this.posList[Math.floor(i / this.column) + 1][i % this.column] = curPosList[i % this.column] + (this.items_[i].height || this.tombstoneSize_) * this.column
         } else {
           this.posList[Math.floor(i / this.column) + 1] = curPosList.slice()
         }
@@ -406,10 +407,10 @@ InfiniteScroller.prototype = {
     return tombstoneAnimations
   },
 
-  cacheItemHeight () {
+  cacheItemHeight (force) {
     for (let i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       // cacheItemsHeight
-      if (this.items_[i].data && !this.items_[i].height) {
+      if (this.items_[i].data && (force || !this.items_[i].height)) {
         this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         this.items_[i].width = this.items_[i].node.offsetWidth
       }
@@ -536,6 +537,7 @@ InfiniteScroller.prototype = {
 
     this.getUnUsedNodes()
     this.clearUnUsedNodes()
+
     this.items_ = []
 
     this.onResize_()
