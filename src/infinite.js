@@ -311,21 +311,36 @@ InfiniteScroller.prototype = {
     let anim
     let x = 0
     let y = 0
+    let row = 0
     let curPosList
     
     if (this.waterflow && !this.posList) {
       this.posList = {
-        0: Array.from({ length: this.column }).map(i => this.curPos)
+        data: {
+          0: Array.from({ length: this.column }).map(i => this.curPos)
+        },
+        get (row, col) {
+          if (!this.data[row]) {
+            this.data[row] = Array.from({ length: this.column }).map(i => this.curPos)
+          }
+          if (col === undefined) return this.data[row]
+          return this.data[row][col]
+        },
+        set (row, col, val) {
+          this.get(row)[col] = val
+        }
       }
     }
+
+    let size = 0
 
     for (i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       anim = tombstoneAnimations[i]
       if (this.waterflow) {
-        curPosList = this.posList[Math.floor(i / this.column)].slice()
+        row = Math.floor(i / this.column)
       }
       x = (i % this.column) * (this.items_[i].width || this.tombstoneWidth_)
-      y = this.waterflow ? curPosList[i % this.column] : this.curPos
+      y = this.waterflow ? this.posList.get(row, i % this.column) : this.curPos
       if (anim) {
         anim[0].style.transition = 'transform ' + this.ANIMATION_DURATION_MS + 'ms, opacity ' + this.ANIMATION_DURATION_MS + 'ms'
         anim[0].style.transform = 'translate3d(' + x + 'px,' + y + 'px, 0) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')'
@@ -335,16 +350,13 @@ InfiniteScroller.prototype = {
         if (!anim) this.items_[i].node.style.transition = ''
         this.items_[i].node.style.transform = 'translate3d('+ x + 'px,' + y + 'px, 0)'
       }
-      this.items_[i].top = this.curPos
+      this.items_[i].top = y
+      
       if ((i + 1) % this.column === 0) {
-        this.curPos += (this.items_[i].height | this.tombstoneSize_) * this.column
+        this.curPos += (this.items_[i].height || this.tombstoneSize_) * this.column
       }
       if (this.waterflow) {
-        if (this.posList[Math.floor(i / this.column) + 1]) {
-          this.posList[Math.floor(i / this.column) + 1][i % this.column] = curPosList[i % this.column] + (this.items_[i].height || this.tombstoneSize_) * this.column
-        } else {
-          this.posList[Math.floor(i / this.column) + 1] = curPosList.slice()
-        }
+        this.posList.set(row + 1, i % this.column, y + (this.items_[i].height || this.tombstoneSize_) * this.column)
       }
     }
   },

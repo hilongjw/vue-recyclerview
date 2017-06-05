@@ -63,7 +63,7 @@ export function assign (target, varArgs) { // .length of function is 2
   return to
 }
 
-export function inView (el, preLoad = 2) {
+export function inView (el, preLoad = 1) {
   const rect = el.getBoundingClientRect()
   return rect.top < window.innerHeight * preLoad &&
   rect.bottom > 0 &&
