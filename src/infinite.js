@@ -60,6 +60,7 @@ export default function InfiniteScroller (scroller, list, source, options) {
   this.items_ = list || []
   this.loadedItems_ = 0
   this.requestInProgress_ = false
+  this.cacheVM = options.cacheVM
 
   if (!this.source_.fetch) {
     this.setItems(list)
@@ -243,6 +244,9 @@ InfiniteScroller.prototype = {
 
   clearItem (item) {
     if (item.vm) {
+      if (this.cacheVM && item.node) {
+        return this.scroller_.removeChild(item.node)
+      }
       item.vm.$destroy()
       if (item.node) {
         this.unusedNodes.push(item.node)
@@ -263,7 +267,7 @@ InfiniteScroller.prototype = {
 
   clearUnUsedNodes () {
     while (this.unusedNodes.length) {
-      this.scroller_.removeChild(this.unusedNodes.pop());
+      this.scroller_.removeChild(this.unusedNodes.pop())
     }
   },
 
@@ -419,13 +423,15 @@ InfiniteScroller.prototype = {
   },
 
   cacheItemHeight (force) {
+    let rect = {}
     for (let i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       // cacheItemsHeight
       if (this.items_[i].data && (force || !this.items_[i].height)) {
         this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         this.items_[i].width = this.items_[i].node.offsetWidth
       } else {
-        if (this.items_[i].height && this.items_[i].node && this.items_[i].height !== this.items_[i].node.offsetHeight / this.column) {
+        rect = this.items_[i].node.getBoundingClientRect()
+        if (this.items_[i].height && this.items_[i].node && this.items_[i].height !== rect.height / this.column) {
           // if height's cache is not match
           this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         }
