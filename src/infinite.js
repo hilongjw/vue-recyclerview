@@ -424,6 +424,11 @@ InfiniteScroller.prototype = {
       if (this.items_[i].data && (force || !this.items_[i].height)) {
         this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         this.items_[i].width = this.items_[i].node.offsetWidth
+      } else {
+        if (this.items_[i].height && this.items_[i].node && this.items_[i].height !== this.items_[i].node.offsetHeight / this.column) {
+          // if height's cache is not match
+          this.items_[i].height = this.items_[i].node.offsetHeight / this.column
+        }
       }
     }
   },
