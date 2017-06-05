@@ -272,7 +272,6 @@ InfiniteScroller.prototype = {
     // that we didn't used to know.
     // TODO: We should only need to do this when a height of an item becomes
     // known above.
-
     this.anchorScrollTop = 0
     for (let i = 0; i < this.anchorItem.index; i++) {
       this.anchorScrollTop += this.items_[i].height || this.tombstoneSize_

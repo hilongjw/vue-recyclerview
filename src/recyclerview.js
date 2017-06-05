@@ -126,6 +126,7 @@ export default (Vue) => {
           this.contentSource,
           this._options
         )
+        this.$emit('inited')
       },
       scrollToIndex (index) {
         if (this.waterflow) {
