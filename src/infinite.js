@@ -28,7 +28,7 @@ const MAX_COUNT = Infinity
  * @param {InfiniteScrollerSource} source A provider of the content to be
  *     displayed in the infinite scroll region.
  */
-export default function InfiniteScroller (scroller, list, source, options) {
+export default function InfiniteScroller (scroller, source, options) {
   // Number of items to instantiate beyond current view in the opposite direction.
   this.RUNWAY_ITEMS = options.prerender
   // Number of items to instantiate beyond current view in the opposite direction.
@@ -57,13 +57,13 @@ export default function InfiniteScroller (scroller, list, source, options) {
   this.tombstones_ = []
   this.scroller_ = scroller
   this.source_ = source
-  this.items_ = list || []
+  this.items_ = options.list || []
   this.loadedItems_ = 0
   this.requestInProgress_ = false
   this.cacheVM = options.cacheVM
 
   if (!this.source_.fetch) {
-    this.setItems(list)
+    this.setItems(options.list)
   }
 
   this.curPos = 0
@@ -87,6 +87,7 @@ export default function InfiniteScroller (scroller, list, source, options) {
   // this.scrollRunway_.style.width = '1px'
   // this.scrollRunway_.style.transition = 'transform 0.2s'
   // this.scroller_.appendChild(this.scrollRunway_)
+  this.initPosList()
   this.onResize_()
 }
 
@@ -112,7 +113,7 @@ InfiniteScroller.prototype = {
     // correct after the item content undergoes layout.
     for (var i = 0; i < this.items_.length; i++) {
       this.items_[i].top = -1
-      this.items_[i].height = this.items_[i].width = 0
+      this.items_[i].height = this.items_[i].width = this.items_[i].cacheHeightCount = 0
     }
     this.onScroll_()
   },
@@ -212,33 +213,32 @@ InfiniteScroller.prototype = {
   },
 
   getUnUsedNodes () {
-    if (this.waterflow) {
-      for (let i = 0; i < this.items_.length; i++) {
-        if (this.items_[i].node && !inView(this.items_[i].node)) {
-          if (this.items_[i].vm) {
-            this.clearItem(this.items_[i])
-          } else {
-            this.clearTombstone(this.items_[i])
-          }
-          this.items_[i].vm = null
-          this.items_[i].node = null
-        }
+    // if (this.waterflow && false) {
+    //   for (let i = 0; i < this.items_.length; i++) {
+    //     if (this.items_[i].node && !inView(this.items_[i].node)) {
+    //       if (this.items_[i].vm) {
+    //         this.clearItem(this.items_[i])
+    //       } else {
+    //         this.clearTombstone(this.items_[i])
+    //       }
+    //       this.items_[i].vm = null
+    //       this.items_[i].node = null
+    //     }
+    //   }
+    // } else {
+    for (let i = 0; i < this.items_.length; i++) {
+      if (i === this.firstAttachedItem_) {
+        i = this.lastAttachedItem_ - 1
+        continue
       }
-    } else {
-      for (let i = 0; i < this.items_.length; i++) {
-        if (i === this.firstAttachedItem_) {
-          i = this.lastAttachedItem_ - 1
-          continue
-        }
-        if (this.items_[i].vm) {
-          this.clearItem(this.items_[i])
-        } else {
-          this.clearTombstone(this.items_[i])
-        }
+      if (this.items_[i].vm) {
+        this.clearItem(this.items_[i])
+      } else {
+        this.clearTombstone(this.items_[i])
+      }
 
-        this.items_[i].vm = null
-        this.items_[i].node = null
-      }
+      this.items_[i].vm = null
+      this.items_[i].node = null
     }
   },
 
@@ -294,6 +294,33 @@ InfiniteScroller.prototype = {
     }
   },
 
+  initPosList () {
+    let data = {}
+    for (let i = 0, len = this.column; i < len; i++) {
+      data[i] = this.curPos
+    }
+
+    this.posList = {
+      data: {
+        0: data
+      },
+      get (row, col) {
+        if (!this.data[row]) {
+          let data = {}
+          for (let i = 0, len = this.column; i < len; i++) {
+            data[i] = this.curPos
+          }
+          this.data[row] = data // Array.from({ length: this.column }).map(i => this.curPos)
+        }
+        if (col === undefined) return this.data[row]
+        return this.data[row][col]
+      },
+      set (row, col, val) {
+        this.get(row)[col] = val
+      }
+    }
+  },
+
   tombstoneLayout (tombstoneAnimations) {
     let i
     let anim
@@ -316,24 +343,6 @@ InfiniteScroller.prototype = {
     let y = 0
     let row = 0
     let curPosList
-    
-    if (this.waterflow && !this.posList) {
-      this.posList = {
-        data: {
-          0: Array.from({ length: this.column }).map(i => this.curPos)
-        },
-        get (row, col) {
-          if (!this.data[row]) {
-            this.data[row] = Array.from({ length: this.column }).map(i => this.curPos)
-          }
-          if (col === undefined) return this.data[row]
-          return this.data[row][col]
-        },
-        set (row, col, val) {
-          this.get(row)[col] = val
-        }
-      }
-    }
 
     let size = 0
 
@@ -374,6 +383,10 @@ InfiniteScroller.prototype = {
     let node
     let newNodes = []
     let i
+
+    if (this.waterflow) {
+      this.lastAttachedItem_ = Math.ceil(this.lastAttachedItem_ / 50) * 50
+    }
 
     const last = Math.floor((this.lastAttachedItem_ + this.RUNWAY_ITEMS) / this.column) * this.column
 
@@ -429,10 +442,11 @@ InfiniteScroller.prototype = {
       if (this.items_[i].data && (force || !this.items_[i].height)) {
         this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         this.items_[i].width = this.items_[i].node.offsetWidth
-      } else {
-        rect = this.items_[i].node.getBoundingClientRect()
-        if (this.items_[i].height && this.items_[i].node && this.items_[i].height !== rect.height / this.column) {
-          // if height's cache is not match
+        this.items_[i].cacheHeightCount = 0
+      } else if (this.items_[i].cacheHeightCount < 10) {
+        // if height's cache is not match
+        this.items_[i].cacheHeightCount++
+        if (this.items_[i].height && this.items_[i].node && this.items_[i].height !== this.items_[i].node.offsetHeight / this.column) {
           this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         }
       }
