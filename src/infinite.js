@@ -214,15 +214,16 @@ InfiniteScroller.prototype = {
   },
 
   layoutInView (i) {
-    const top = this.posList.get(Math.floor(i / this.column) - 1, i % this.column)
+    const top = this.posList.get(Math.floor(i / this.column), i % this.column)
     if (!top) return true
-    return (Math.abs(top - this.anchorScrollTop) < window.innerHeight * 2)
+    const index = top - this.anchorScrollTop
+    return (index > -window.innerHeight * .5 && index < window.innerHeight)
   },
 
   getUnUsedNodes (clearAll) {
     if (this.waterflow) {
       for (let i = 0, len = this.items_.length; i < len; i++) {
-        if (this.items_[i].node && (clearAll || !this.layoutInView(i))) {//!inView(this.items_[i].node)) {
+        if (this.items_[i].node && (clearAll || !this.layoutInView(i))) {
           if (this.items_[i].vm) {
             this.clearItem(this.items_[i])
           } else {
@@ -369,7 +370,7 @@ InfiniteScroller.prototype = {
         anim[0].style.transform = 'translate3d(' + x + 'px,' + y + 'px, 0) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')'
         anim[0].style.opacity = 0
       }
-      if (this.curPos !== this.items_[i].top) {
+      if (this.items_[i].node && this.curPos !== this.items_[i].top) {
         if (!anim) this.items_[i].node.style.transition = ''
         this.items_[i].node.style.transform = 'translate3d('+ x + 'px,' + y + 'px, 0)'
       }
@@ -422,17 +423,33 @@ InfiniteScroller.prototype = {
           continue
         }
       }
-      if (this.items_[i].data) {
-        node = this.source_.render(this.items_[i].data, (this.unusedNodes.pop() || this.baseNode.cloneNode(true)), this.items_[i])
+      if (this.waterflow) {
+        if (this.layoutInView(i)) {
+          if (this.items_[i].data) {
+            node = this.source_.render(this.items_[i].data, (this.unusedNodes.pop() || this.baseNode.cloneNode(true)), this.items_[i])
+          } else {
+            node = this.getTombstone()
+          }
+          // Maybe don't do this if it's already attached?
+          node.style.position = 'absolute'
+          this.items_[i].top = -1
+          // this.scroller_.appendChild(node)
+          this.items_[i].node = node
+          newNodes.push(node)
+        }
       } else {
-        node = this.getTombstone()
+        if (this.items_[i].data) {
+          node = this.source_.render(this.items_[i].data, (this.unusedNodes.pop() || this.baseNode.cloneNode(true)), this.items_[i])
+        } else {
+          node = this.getTombstone()
+        }
+        // Maybe don't do this if it's already attached?
+        node.style.position = 'absolute'
+        this.items_[i].top = -1
+        // this.scroller_.appendChild(node)
+        this.items_[i].node = node
+        newNodes.push(node)
       }
-      // Maybe don't do this if it's already attached?
-      node.style.position = 'absolute'
-      this.items_[i].top = -1
-      // this.scroller_.appendChild(node)
-      this.items_[i].node = node
-      newNodes.push(node)
     }
 
     let len = newNodes.length
@@ -446,7 +463,7 @@ InfiniteScroller.prototype = {
     let rect = {}
     for (let i = this.firstAttachedItem_; i < this.lastAttachedItem_; i++) {
       // cacheItemsHeight
-      if (this.items_[i].data && (force || !this.items_[i].height)) {
+      if (this.items_[i].data && this.items_[i].node && (force || !this.items_[i].height)) {
         this.items_[i].height = this.items_[i].node.offsetHeight / this.column
         this.items_[i].width = this.items_[i].node.offsetWidth
         this.items_[i].cacheHeightCount = 0
