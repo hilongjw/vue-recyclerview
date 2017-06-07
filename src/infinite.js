@@ -61,6 +61,7 @@ export default function InfiniteScroller (scroller, source, options) {
   this.loadedItems_ = 0
   this.requestInProgress_ = false
   this.cacheVM = options.cacheVM
+  this.options = options
 
   if (!this.source_.fetch) {
     this.setItems(options.list)
@@ -212,38 +213,49 @@ InfiniteScroller.prototype = {
     return this.source_.createTombstone(this.baseNode.cloneNode(true))
   },
 
-  getUnUsedNodes () {
-    // if (this.waterflow && false) {
-    //   for (let i = 0; i < this.items_.length; i++) {
-    //     if (this.items_[i].node && !inView(this.items_[i].node)) {
-    //       if (this.items_[i].vm) {
-    //         this.clearItem(this.items_[i])
-    //       } else {
-    //         this.clearTombstone(this.items_[i])
-    //       }
-    //       this.items_[i].vm = null
-    //       this.items_[i].node = null
-    //     }
-    //   }
-    // } else {
-    for (let i = 0; i < this.items_.length; i++) {
-      if (i === this.firstAttachedItem_) {
-        i = this.lastAttachedItem_ - 1
-        continue
-      }
-      if (this.items_[i].vm) {
-        this.clearItem(this.items_[i])
-      } else {
-        this.clearTombstone(this.items_[i])
-      }
+  layoutInView (i) {
+    const top = this.posList.get(Math.floor(i / this.column) - 1, i % this.column)
+    if (!top) return true
+    return (Math.abs(top - this.anchorScrollTop) < window.innerHeight * 2)
+  },
 
-      this.items_[i].vm = null
-      this.items_[i].node = null
+  getUnUsedNodes () {
+    if (this.waterflow) {
+      for (let i = 0, len = this.items_.length; i < len; i++) {
+        this.layoutInView(i)
+        if (this.items_[i].node && !this.layoutInView(i)) {//!inView(this.items_[i].node)) {
+          if (this.items_[i].vm) {
+            this.clearItem(this.items_[i])
+          } else {
+            this.clearTombstone(this.items_[i])
+          }
+          this.items_[i].vm = null
+          this.items_[i].node = null
+        }
+      }
+    } else {
+      for (let i = 0, len = this.items_.length; i < len; i++) {
+        if (i === this.firstAttachedItem_) {
+          i = this.lastAttachedItem_ - 1
+          continue
+        }
+        if (this.items_[i].vm) {
+          this.clearItem(this.items_[i])
+        } else {
+          this.clearTombstone(this.items_[i])
+        }
+
+        this.items_[i].vm = null
+        this.items_[i].node = null
+      }
     }
   },
 
   clearItem (item) {
-    if (item.vm) {
+    if (this.options.reuseVM) {
+      this.scroller_.removeChild(item.node)
+      this.source_.free(item.data)
+    } else {
       if (this.cacheVM && item.node) {
         return this.scroller_.removeChild(item.node)
       }
@@ -251,7 +263,7 @@ InfiniteScroller.prototype = {
       if (item.node) {
         this.unusedNodes.push(item.node)
       }
-    }
+    }    
   },
 
   clearTombstone (item) {
@@ -383,10 +395,6 @@ InfiniteScroller.prototype = {
     let node
     let newNodes = []
     let i
-
-    if (this.waterflow) {
-      this.lastAttachedItem_ = Math.ceil(this.lastAttachedItem_ / 50) * 50
-    }
 
     const last = Math.floor((this.lastAttachedItem_ + this.RUNWAY_ITEMS) / this.column) * this.column
 

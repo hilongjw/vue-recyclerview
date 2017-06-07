@@ -70,3 +70,11 @@ export function inView (el, preLoad = 1) {
   rect.left < window.innerWidth * preLoad &&
   rect.right > 0
 }
+
+export function find (arr, handler) {
+  for (let i = 0, len = arr.length; i < len; i++) {
+    if (handler(arr[i], i)) {
+      return arr[i]
+    }
+  }
+}

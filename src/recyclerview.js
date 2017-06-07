@@ -43,6 +43,7 @@ const options = {
   column: 1,
   waterflow: false,
   cacheVM: 0,
+  reuseVM: false,
   props: {}
 }
 
