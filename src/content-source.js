@@ -145,5 +145,6 @@ export default class ContentSource {
 
   destroy () {
     this.reuseVM.destroy(null, true)
+    return this.reuseVM.queue
   }
 }

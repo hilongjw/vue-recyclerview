@@ -219,11 +219,10 @@ InfiniteScroller.prototype = {
     return (Math.abs(top - this.anchorScrollTop) < window.innerHeight * 2)
   },
 
-  getUnUsedNodes () {
+  getUnUsedNodes (clearAll) {
     if (this.waterflow) {
       for (let i = 0, len = this.items_.length; i < len; i++) {
-        this.layoutInView(i)
-        if (this.items_[i].node && !this.layoutInView(i)) {//!inView(this.items_[i].node)) {
+        if (this.items_[i].node && (clearAll || !this.layoutInView(i))) {//!inView(this.items_[i].node)) {
           if (this.items_[i].vm) {
             this.clearItem(this.items_[i])
           } else {
@@ -579,7 +578,7 @@ InfiniteScroller.prototype = {
     this.firstAttachedItem_ = -1
     this.lastAttachedItem_ = -1
 
-    this.getUnUsedNodes()
+    this.getUnUsedNodes(true)
     this.clearUnUsedNodes()
 
     this.items_ = []
