@@ -17,7 +17,7 @@
  * Author surma https://github.com/surma
  * Modified by Awe @hilongjw
  */
-import { inView } from './util'
+import { inView, setStyle } from './util'
 
 const MAX_COUNT = Infinity
 
@@ -186,6 +186,10 @@ InfiniteScroller.prototype = {
     }
   },
 
+  setStyle (el, key, val) {
+    setStyle(el, key, val, this.options.usePrefix)
+  },
+
   /**
    * Sets the range of items which should be attached and attaches those items.
    * @param {number} start The first item which should be attached.
@@ -206,8 +210,8 @@ InfiniteScroller.prototype = {
     if (tombstone) {
       tombstone.classList.remove(this.INVISIBLE_CLASS)
       tombstone.style.opacity = 1
-      tombstone.style.transform = ''
-      tombstone.style.transition = ''
+      this.setStyle(tombstone, 'transform', '')
+      this.setStyle(tombstone, 'transition', '')
       return tombstone
     }
     return this.source_.createTombstone(this.baseNode.cloneNode(true))
@@ -340,11 +344,11 @@ InfiniteScroller.prototype = {
     for (i in tombstoneAnimations) {
       anim = tombstoneAnimations[i]
       x = (i % this.column) * this.items_[i].width
-      this.items_[i].node.style.transform = 'translate3d(' + x + 'px,' + (this.anchorScrollTop + anim[1]) * this.column + 'px, 0) scale(' + (this.tombstoneWidth_ / this.items_[i].width) + ', ' + (this.tombstoneSize_ / this.items_[i].height) + ')'
+      this.setStyle(this.items_[i].node, 'transform', 'translate3d(' + x + 'px,' + (this.anchorScrollTop + anim[1]) * this.column + 'px, 0) scale(' + (this.tombstoneWidth_ / this.items_[i].width) + ', ' + (this.tombstoneSize_ / this.items_[i].height) + ')')
       // Call offsetTop on the nodes to be animated to force them to apply current transforms.
       this.items_[i].node.offsetTop
       anim[0].offsetTop
-      this.items_[i].node.style.transition = 'transform ' + this.ANIMATION_DURATION_MS + 'ms'
+      this.setStyle(this.items_[i].node, 'transition', 'transform ' + this.ANIMATION_DURATION_MS + 'ms')
     }
   },
 
@@ -366,13 +370,13 @@ InfiniteScroller.prototype = {
       x = (i % this.column) * (this.items_[i].width || this.tombstoneWidth_)
       y = this.waterflow ? this.posList.get(row, i % this.column) : this.curPos
       if (anim) {
-        anim[0].style.transition = 'transform ' + this.ANIMATION_DURATION_MS + 'ms, opacity ' + this.ANIMATION_DURATION_MS + 'ms'
-        anim[0].style.transform = 'translate3d(' + x + 'px,' + y + 'px, 0) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')'
+        this.setStyle(anim[0], 'transition', 'transform ' + this.ANIMATION_DURATION_MS + 'ms, opacity ' + this.ANIMATION_DURATION_MS + 'ms')
+        this.setStyle(anim[0], 'transform', 'translate3d(' + x + 'px,' + y + 'px, 0) scale(' + (this.items_[i].width / this.tombstoneWidth_) + ', ' + (this.items_[i].height / this.tombstoneSize_) + ')')
         anim[0].style.opacity = 0
       }
       if (this.items_[i].node && this.curPos !== this.items_[i].top) {
-        if (!anim) this.items_[i].node.style.transition = ''
-        this.items_[i].node.style.transform = 'translate3d('+ x + 'px,' + y + 'px, 0)'
+        if (!anim) this.setStyle(this.items_[i].node, 'transition', '')
+        this.setStyle(this.items_[i].node, 'transform', 'translate3d('+ x + 'px,' + y + 'px, 0)')
       }
       this.items_[i].top = y
       
@@ -519,7 +523,7 @@ InfiniteScroller.prototype = {
 
   setScrollRunway () {
     this.scrollRunwayEnd_ = Math.max(this.scrollRunwayEnd_, this.curPos + this.SCROLL_RUNWAY)
-    this.scrollRunway_.style.transform = 'translate(0, ' + this.scrollRunwayEnd_ + 'px)'
+    this.setStyle(this.scrollRunway_, 'transform', 'translate(0, ' + this.scrollRunwayEnd_ + 'px)')
     this.scroller_.scrollTop = this.anchorScrollTop
   },
 

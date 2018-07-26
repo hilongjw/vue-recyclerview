@@ -4,7 +4,8 @@ import {
   getEventPosition,
   requestAnimationFrame,
   preventDefaultException,
-  assign
+  assign,
+  setStyle
  } from './util'
 
 const Loading = {
@@ -44,6 +45,7 @@ const options = {
   waterflow: false,
   cacheVM: 0,
   reuseVM: false,
+  usePrefix: false,
   props: {}
 }
 
@@ -99,19 +101,20 @@ export default (Vue) => {
           x: 0,
           y: 0
         },
+        $list: null,
         _options: {},
         distance: 0,
         pulling: false,
         _contentSource: null,
-        scroller: null
+        _scroller: null
       }
     },
     mounted () {
       this.init()
     },
     beforeDestroy () {
-      this.scroller.destroy()
-      this.scroller = null
+      this._scroller.destroy()
+      this._scroller = null
     },
     methods: {
       init () {
@@ -130,7 +133,7 @@ export default (Vue) => {
         this._contentSource = new ContentSource(Vue, this._options)
 
         this.$list = this.$el.querySelector('.recyclerview')
-        this.scroller = new InfiniteScroller(
+        this._scroller = new InfiniteScroller(
           this.$list,
           this._contentSource,
           this._options
@@ -139,15 +142,15 @@ export default (Vue) => {
       },
       scrollToIndex (index) {
         if (this.waterflow) {
-          for (let i = 0, len = this.scroller.items_.length; i < len; i++) {
+          for (let i = 0, len = this._scroller.items_.length; i < len; i++) {
             if (i === index) {
-              this._scrollTo(this.scroller.items_[i].top - this.scroller.items_[i].height * this._options.column + this.$list.offsetWidth)
+              this._scrollTo(this._scroller.items_[i].top - this._scroller.items_[i].height * this._options.column + this.$list.offsetWidth)
             }
           }
           return
         }
         index = Number(index)
-        this.scroller.scrollToIndex(index)
+        this._scroller.scrollToIndex(index)
         this.$nextTick(() => {
           this._scrollToBottom()
         })
@@ -160,13 +163,13 @@ export default (Vue) => {
         this._scrollTo(this.$list.scrollHeight)
       },
       _renderListStyle () {
-        this.$list.style.transform = 'translate3d(0, ' + this.distance + 'px, 0)'
+        setStyle(this.$list, 'transform', 'translate3d(0, ' + this.distance + 'px, 0)', this.options.usePrefix)
       },
       _start (e) {
         if (this.$list.scrollTop > 0) return
         this.pulling = true
         this.startPointer = getEventPosition(e)
-        this.$list.style.transition = 'transform .2s'
+        setStyle(this.$list, 'transition', 'transform .2s', this.options.usePrefix)
         if (this.preventDefault && !preventDefaultException(e.target, this._options.preventDefaultException)) {
           e.preventDefault()
         }
@@ -203,7 +206,7 @@ export default (Vue) => {
         })
         if (this.distance >= this._options.distance) {
           this.distance = 0
-          this.scroller.clear()
+          this._scroller.clear()
         }
       }
     }

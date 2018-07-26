@@ -63,6 +63,24 @@ export function assign (target, varArgs) { // .length of function is 2
   return to
 }
 
+const prefixs = ['ms', 'Moz', 'Webkit', 'O']
+const prefixCache = {}
+function getPrefix (_key) {
+  if (prefixCache[_key]) return prefixCache[_key]
+  const key = _key[0].toUpperCase() + _key.slice(1, _key.length)
+  prefixCache[_key] = prefixs.map(p => p + key)
+  return prefixCache[_key]
+}
+
+export function setStyle (el, key, value, usePrefix) {
+  el.style[key] = value
+  if (!usePrefix) return
+  const keys = getPrefix(key)
+  keys.map(prefixedKey => {
+    el.style[prefixedKey] = value
+  })
+}
+
 export function inView (el, preLoad = 1) {
   const rect = el.getBoundingClientRect()
   return rect.top < window.innerHeight * preLoad &&
