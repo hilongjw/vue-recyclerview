@@ -131,6 +131,7 @@ export default {
 |`item`|The Vue component of RecyclerView's item||Vue component|
 |`tombstone`|The Vue component of RecyclerView's tombstone||Vue component|
 |`loading`|The loading component behind the RecyclerView pull-to-refresh |built-in loading|Vue component|
+|`options`|advanced options|-|Object|
 
 
 - fetch:Function
@@ -170,6 +171,61 @@ function fetch (limit:Number, skip:Number) {
   width: 100,
   top: 0,
 }]
+```
+
+- options
+
+```vue
+<RecyclerView 
+ref="RecyclerView"
+key="wechat"
+class="recyclerview-container wechat" 
+:fetch="wechatFetch" 
+:item="ChatItem" 
+:tombstone="Tombstone"
+:prerender="10"
+:remain="10"
+:options="wechatOptions"
+@inited="initScrollToBottom"
+></RecyclerView>
+```
+
+```javascript
+data () {
+  return {
+    wechatOptions: {
+      reuseVM: true,
+      usePrefix: true,
+      props: {
+        color: {
+          value: ''
+        }
+      }
+    }
+  }
+}
+```
+
+default:
+
+```javascript
+const options = {
+  preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|IMG)$/ },
+  distance: 50,
+  animation_duration_ms: 200,
+  tombstone_class: 'tombstone',
+  invisible_class: 'invisible',
+  prerender: 20,
+  remain: 10,
+  preventDefault: false,
+  column: 1,
+  waterflow: false,
+  cacheVM: 0,
+  reuseVM: false,
+  usePrefix: false,
+  props: {}
+}
+
 ```
 
 ## Instance Method
