@@ -163,13 +163,13 @@ export default (Vue) => {
         this._scrollTo(this.$list.scrollHeight)
       },
       _renderListStyle () {
-        setStyle(this.$list, 'transform', 'translate3d(0, ' + this.distance + 'px, 0)', this.options.usePrefix)
+        setStyle(this.$list, 'transform', 'translate3d(0, ' + this.distance + 'px, 0)', this._options.usePrefix)
       },
       _start (e) {
         if (this.$list.scrollTop > 0) return
         this.pulling = true
         this.startPointer = getEventPosition(e)
-        setStyle(this.$list, 'transition', 'transform .2s', this.options.usePrefix)
+        setStyle(this.$list, 'transition', 'transform .2s', this._options.usePrefix)
         if (this.preventDefault && !preventDefaultException(e.target, this._options.preventDefaultException)) {
           e.preventDefault()
         }
